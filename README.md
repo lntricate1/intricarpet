@@ -1,16 +1,8 @@
-# Fabric Example Mod
-
-## Setup
-
-1. Edit build.gradle and mod.json to suit your needs.
-    * The "mixins" object can be removed from mod.json if you do not need to use mixins.
-    * Please replace all occurences of "modid" with your own mod ID - sometimes, a different string may also suffice.
-2. Run the following command:
-
-```
-./gradlew idea
-```
-
-## License
-
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+# Intricate's Carpet Addons: "intricarpet"
+## Supported Versions
+For now, only `1.16.5`.
+## Features
+### Logging
+`/log explosions compact`: Groups explosions by position, reduces spam in big cannons and makes it easier to find different positions in a sea of explosions.
+### Scarpet
+`on_move` entity event: Gets called every time an entity changes position, at the `TAIL` of the `setPos` method. Required arguments: `entity, motion, pos1, pos2`.
