@@ -3,6 +3,7 @@
   "package": "intricarpet.mixins",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "CrashReport_noopMixin",
     "intricarpet_Entity_scarpetEventsMixin",
     "intricarpetExplosionMixin",
     "intricarpetServerWorldMixin"
