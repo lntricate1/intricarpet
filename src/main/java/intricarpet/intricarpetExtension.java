@@ -17,4 +17,10 @@ public class intricarpetExtension implements CarpetExtension
     {
         intricarpetLoggerRegisty.registerLoggers();
     }
+
+    @Override
+    public String version()
+    {
+        return "intricarpet";
+    }
 }
