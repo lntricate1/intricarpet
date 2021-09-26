@@ -1,20 +1,20 @@
 {
   "schemaVersion": 1,
-  "id": "carpet-extension",
-  "version": "1.4.6",
+  "id": "intricarpet",
+  "version": "1.0.0",
 
-  "name": "Example Carpet Extension Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "Intricate Carpet extensions",
+  "description": "Poggers carpet addons",
   "authors": [
-    "Me!"
+    "lntricate"
   ],
   "contact": {
-    "homepage": "https://web.me/",
-    "sources": "https://github.com/gnembon/fabric-carpet-extension-example-mod"
+    "homepage": "https://youtube.com/c/lntricateuwu",
+    "sources": "https://github.com/lntricate1/EntityTrackerScript"
   },
 
   "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
+  "icon": "assets/intricarpet/icon.png",
 
   "environment": "*",
   "entrypoints": {
@@ -22,7 +22,7 @@
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "intricarpet.mixins.json"
   ],
 
   "depends": {

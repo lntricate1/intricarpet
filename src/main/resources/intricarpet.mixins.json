@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "package": "intricarpet.mixins",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "CrashReport_noopMixin",
+    "MobEntity_makarenaMixin",
+    "intricarpet_Entity_scarpetEventsMixin",
+    "intricarpetExplosionMixin",
+    "intricarpetServerWorldMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
