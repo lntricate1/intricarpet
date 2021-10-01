@@ -17,6 +17,7 @@ public class intricarpetExplosionLogHelper extends ExplosionLogHelper
     private static long lastGametime = 0;
     private static Vec3d previousPosition = null;
     private static boolean affectBlocks = false;
+    private static long startTime = 0;
 
     public intricarpetExplosionLogHelper(Entity entity, double x, double y, double z, float power, boolean createFire, Explosion.DestructionType blockDestructionType)
     {
@@ -26,6 +27,7 @@ public class intricarpetExplosionLogHelper extends ExplosionLogHelper
     public void onExplosionDone(long gametime)
     {
         List<BaseText> messages = new ArrayList<>();
+        if(startTime == 0) startTime = System.currentTimeMillis();
         if (lastGametime != gametime)
         {
             explosionCountInCurretPos = 0;
@@ -41,10 +43,12 @@ public class intricarpetExplosionLogHelper extends ExplosionLogHelper
                 {
                     messages.add(Messenger.c("d #" + explosionCountInCurretGT,"gb ->",
                         "d " + explosionCountInCurretPos + "x ",
-                        Messenger.dblt("l", previousPosition.x, previousPosition.y, previousPosition.z), (affectBlocks)?"m  (affects blocks)":"m  (doesn't affect blocks)"));
+                        Messenger.dblt("l", previousPosition.x, previousPosition.y, previousPosition.z), (affectBlocks)?"m  (affects blocks)":"m  (doesn't affect blocks)",
+                        "g  (", "d " + (System.currentTimeMillis() - startTime), "g ms)"));
                     previousPosition = pos;
                     explosionCountInCurretGT += explosionCountInCurretPos;
                     explosionCountInCurretPos = 0;
+                    startTime = 0;
                 }
                 if(previousPosition == null) previousPosition = pos;
             }
@@ -64,8 +68,10 @@ public class intricarpetExplosionLogHelper extends ExplosionLogHelper
                 {
                     messages.add(Messenger.c("d #" + explosionCountInCurretGT,"gb ->",
                         "d " + explosionCountInCurretPos + "x ",
-                        Messenger.dblt("l", previousPosition.x, previousPosition.y, previousPosition.z), (affectBlocks)?"m  (affects blocks)":"m  (doesn't affect blocks)"));
+                        Messenger.dblt("l", previousPosition.x, previousPosition.y, previousPosition.z), (affectBlocks)?"m  (affects blocks)":"m  (doesn't affect blocks)",
+                        "g  (", "d " + (System.currentTimeMillis() - startTime), "g ms)"));
                     previousPosition = null;
+                    startTime = 0;
                 }
             }
             return messages.toArray(new BaseText[0]);
