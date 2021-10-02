@@ -27,30 +27,29 @@ public class intricarpetExplosionLogHelper extends ExplosionLogHelper
     public void onExplosionDone(long gametime)
     {
         List<BaseText> messages = new ArrayList<>();
-        if(startTime == 0) startTime = System.currentTimeMillis();
         if (lastGametime != gametime)
         {
             explosionCountInCurretPos = 0;
             explosionCountInCurretGT = 1;
-            previousPosition = null;
+            previousPosition = pos;
             lastGametime = gametime;
+            startTime = System.currentTimeMillis();
         }
         LoggerRegistry.getLogger("explosions").log((option) ->
         {
             if ("compact".equals(option))
             {
-                if(previousPosition != null && !pos.equals(previousPosition))
+                if (previousPosition != null && !pos.equals(previousPosition))
                 {
-                    messages.add(Messenger.c("d #" + explosionCountInCurretGT,"gb ->",
+                    messages.add(Messenger.c("d #" + explosionCountInCurretGT + " ","gb -> ",
                         "d " + explosionCountInCurretPos + "x ",
                         Messenger.dblt("l", previousPosition.x, previousPosition.y, previousPosition.z), (affectBlocks)?"m  (affects blocks)":"m  (doesn't affect blocks)",
                         "g  (", "d " + (System.currentTimeMillis() - startTime), "g ms)"));
                     previousPosition = pos;
                     explosionCountInCurretGT += explosionCountInCurretPos;
                     explosionCountInCurretPos = 0;
-                    startTime = 0;
+                    startTime = System.currentTimeMillis();
                 }
-                if(previousPosition == null) previousPosition = pos;
             }
             return messages.toArray(new BaseText[0]);
         });
@@ -66,7 +65,7 @@ public class intricarpetExplosionLogHelper extends ExplosionLogHelper
             {
                 if(previousPosition != null)
                 {
-                    messages.add(Messenger.c("d #" + explosionCountInCurretGT,"gb ->",
+                    messages.add(Messenger.c("d #" + explosionCountInCurretGT + " ","gb -> ",
                         "d " + explosionCountInCurretPos + "x ",
                         Messenger.dblt("l", previousPosition.x, previousPosition.y, previousPosition.z), (affectBlocks)?"m  (affects blocks)":"m  (doesn't affect blocks)",
                         "g  (", "d " + (System.currentTimeMillis() - startTime), "g ms)"));
