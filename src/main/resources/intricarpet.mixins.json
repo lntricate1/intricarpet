@@ -6,7 +6,8 @@
     "CrashReport_noopMixin",
     "intricarpet_Entity_scarpetEventsMixin",
     "intricarpetExplosionMixin",
-    "intricarpetServerWorldMixin"
+    "intricarpetServerWorldMixin",
+    "intricarpetOptimizedExplosionMixin"
   ],
   "client": [
   ],

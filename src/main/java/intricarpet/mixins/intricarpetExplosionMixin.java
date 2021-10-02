@@ -1,6 +1,7 @@
 package intricarpet.mixins;
 
 import net.minecraft.world.explosion.Explosion;
+import intricarpet.intricarpetRules;
 import intricarpet.logging.logHelpers.intricarpetExplosionLogHelper;
 import carpet.logging.LoggerRegistry;
 import carpet.CarpetSettings;
@@ -21,16 +22,23 @@ import net.minecraft.world.explosion.ExplosionBehavior;
 @Mixin(Explosion.class)
 public abstract class intricarpetExplosionMixin
 {
-    @Shadow
-    @Final
-    private List<BlockPos> affectedBlocks;
+    @Shadow @Final private List<BlockPos> affectedBlocks;
 
     @Shadow @Final private World world;
 
     private intricarpetExplosionLogHelper logger;
 
-    @Inject(method = "affectWorld", at = @At("HEAD"),
-            cancellable = true)
+    @Inject(method = "collectBlocksAndDamageEntities", at = @At("HEAD"), cancellable = true)
+    private void betterOptimization(CallbackInfo ci)
+    {
+        if(intricarpetRules.optimizedTNTExtra)
+        {
+            intricarpet.helpers.OptimizedExplosion.doExplosionA((Explosion) (Object) this, logger);
+            ci.cancel();
+        }
+    }
+
+    @Inject(method = "affectWorld", at = @At("HEAD"), cancellable = true)
     private void onExplosionB(boolean spawnParticles, CallbackInfo ci)
     {
         if (logger != null)
