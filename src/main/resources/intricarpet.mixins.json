@@ -8,7 +8,8 @@
     "intricarpetExplosionMixin",
     "intricarpetServerWorldMixin",
     "intricarpetOptimizedExplosionMixin",
-    "intricarpetTntBlockMixin"
+    "intricarpetTntBlockMixin",
+    "intricarpetSlimeEntityMixin"
   ],
   "client": [
   ],
