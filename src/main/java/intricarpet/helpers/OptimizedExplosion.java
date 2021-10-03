@@ -261,14 +261,13 @@ public class OptimizedExplosion
         double xInc = (xRel / len) * 0.3;
         double yInc = (yRel / len) * 0.3;
         double zInc = (zRel / len) * 0.3;
-        float rand = eAccess.getWorld().random.nextFloat();
-        float sizeRand = (CarpetSettings.tntRandomRange >= 0 ? (float) CarpetSettings.tntRandomRange : rand);
+        float sizeRand = (CarpetSettings.tntRandomRange >= 0 ? (float) CarpetSettings.tntRandomRange : eAccess.getWorld().random.nextFloat());
         float size = eAccess.getPower() * (0.7F + sizeRand * 0.6F);
         double posX = eAccess.getX();
         double posY = eAccess.getY();
         double posZ = eAccess.getZ();
 
-        for (float f1 = 0.3F; size > 0.0F; size -= 0.22500001F)
+        for (; size > 0.0F; size -= 0.22500001F)
         {
             posMutable.set(posX, posY, posZ);
 
@@ -344,7 +343,7 @@ public class OptimizedExplosion
                         double d8 = eAccess.getZ();
                         boolean found = false;
 
-                        for (float f1 = 0.3F; f > 0.0F; f -= 0.22500001F) {
+                        for (; f > 0.0F; f -= 0.22500001F) {
                             BlockPos blockpos = new BlockPos(d4, d6, d8);
                             BlockState state = eAccess.getWorld().getBlockState(blockpos);
                             FluidState fluidState = eAccess.getWorld().getFluidState(blockpos);
