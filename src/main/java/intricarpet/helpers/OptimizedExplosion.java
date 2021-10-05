@@ -145,7 +145,7 @@ public class OptimizedExplosion
                 if (entity instanceof PlayerEntity) {
                     PlayerEntity player = (PlayerEntity) entity;
                     if (!player.isSpectator()
-                            && (!player.isCreative() || !player.abilities.flying)) {
+                            && (!player.isCreative() || !player.getAbilities().flying)) {
                         e.getAffectedPlayers().put(player, vel);
                     }
                 }
@@ -161,12 +161,12 @@ public class OptimizedExplosion
         double ex = epos.getX();
         double ey = epos.getY();
         double ez = epos.getZ();
-        double d1 = MathHelper.sqrt(epos.squaredDistanceTo(px, py, pz)) / (double) power;
+        double d1 = Math.sqrt(epos.squaredDistanceTo(px, py, pz)) / (double) power;
         if(d1 > 1.0D) return null;
         double x1 = ex - px;
         double y1 = (tnt ? ey : eyeY) - py;
         double z1 = ez - pz;
-        double d2 = (double) MathHelper.sqrt(x1 * x1 + y1 * y1 + z1 * z1);
+        double d2 = (double) Math.sqrt(x1 * x1 + y1 * y1 + z1 * z1);
         if(d2 == 0) return null;
         x1 /= d2;
         y1 /= d2;
@@ -268,7 +268,7 @@ public class OptimizedExplosion
         double posY = eAccess.getY();
         double posZ = eAccess.getZ();
 
-        for (float f1 = 0.3F; size > 0.0F; size -= 0.22500001F)
+        for (; size > 0.0F; size -= 0.22500001F)
         {
             posMutable.set(posX, posY, posZ);
 
@@ -344,7 +344,7 @@ public class OptimizedExplosion
                         double d8 = eAccess.getZ();
                         boolean found = false;
 
-                        for (float f1 = 0.3F; f > 0.0F; f -= 0.22500001F) {
+                        for (; f > 0.0F; f -= 0.22500001F) {
                             BlockPos blockpos = new BlockPos(d4, d6, d8);
                             BlockState state = eAccess.getWorld().getBlockState(blockpos);
                             FluidState fluidState = eAccess.getWorld().getFluidState(blockpos);
