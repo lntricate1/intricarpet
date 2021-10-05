@@ -23,6 +23,25 @@ public class Interactions
 
     public static void setPlayerInteraction(String playerName, String interactionName, boolean b)
     {
+        if(interactionName.equals("all"))
+            for(String x : Interactions.interactionList)
+                if(!x.equals("all"))
+                {
+                    if(playerFromName(playerName) != null)
+                    {
+                        if(!onlinePlayerMap.containsKey(playerName)) onlinePlayerMap.put(playerName, new HashSet<>());
+                        if(b) onlinePlayerMap.get(playerName).add(x);
+                        else onlinePlayerMap.get(playerName).remove(x);
+                        if(onlinePlayerMap.get(playerName).size() == 0) onlinePlayerMap.remove(playerName);
+                    }
+                    else
+                    {
+                        if(!offlinePlayerMap.containsKey(playerName)) offlinePlayerMap.put(playerName, new HashSet<>());
+                        if(b) offlinePlayerMap.get(playerName).add(x);
+                        else offlinePlayerMap.get(playerName).remove(x);
+                        if(offlinePlayerMap.get(playerName).size() == 0) offlinePlayerMap.remove(playerName);
+                    }
+                }
         if(playerFromName(playerName) != null)
         {
             if(!onlinePlayerMap.containsKey(playerName)) onlinePlayerMap.put(playerName, new HashSet<>());
