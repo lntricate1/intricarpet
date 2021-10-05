@@ -1,5 +1,6 @@
 {
   "required": true,
+  "refmap": "intricarpet-refmap.json",
   "package": "intricarpet.mixins",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
@@ -11,7 +12,9 @@
     "intricarpetTntBlockMixin",
     "intricarpetSlimeEntityMixin",
     "ThreadedAnvilChunkStorageMixin",
-    "ProjectileEntity_InteractionMixin"
+    "ProjectileEntity_InteractionMixin",
+    "PlayerEntity_InteractionMixin",
+    "Entity_InteractionMixin"
   ],
   "client": [
   ],
