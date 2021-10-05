@@ -12,9 +12,12 @@
     "intricarpetTntBlockMixin",
     "intricarpetSlimeEntityMixin",
     "ThreadedAnvilChunkStorageMixin",
+
     "ProjectileEntity_InteractionMixin",
     "PlayerEntity_InteractionMixin",
-    "Entity_InteractionMixin"
+    "Entity_InteractionMixin",
+    "ExperienceOrbEntity_InteractionMixin",
+    "ServerPlayNetworkHandler_InteractionMixin"
   ],
   "client": [
   ],

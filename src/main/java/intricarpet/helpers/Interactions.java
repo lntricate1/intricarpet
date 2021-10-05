@@ -16,7 +16,9 @@ public class Interactions
     public static Set<String> interactionList = Set.of(
         "all",
         "chunkloading",
-        "entities"
+        "entities",
+        "blocks",
+        "updates"
     );
 
     public static void setPlayerInteraction(String playerName, String interactionName, boolean b)
