@@ -36,7 +36,7 @@ public class InteractionCommand
 
     private static int setPlayerInteraction(ServerCommandSource source, String playerName, String interactionName, boolean b)
     {
-        PlayerEntity player = source.getMinecraftServer().getPlayerManager().getPlayer(playerName);
+        PlayerEntity player = source.getServer().getPlayerManager().getPlayer(playerName);
         if(player == null)
         {
             Messenger.m(source, "r No player specified");
@@ -54,7 +54,7 @@ public class InteractionCommand
 
     private static int listPlayerInteractions(ServerCommandSource source, String playerName)
     {
-        PlayerEntity player = source.getMinecraftServer().getPlayerManager().getPlayer(playerName);
+        PlayerEntity player = source.getServer().getPlayerManager().getPlayer(playerName);
         if(player == null)
         {
             Messenger.m(source, "r No player specified");
