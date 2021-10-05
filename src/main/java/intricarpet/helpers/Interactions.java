@@ -15,7 +15,8 @@ public class Interactions
     public static Map<String, Set<String>> offlinePlayerMap = new HashMap<>();
     public static Set<String> interactionList = Set.of(
         "all",
-        "chunkloading"
+        "chunkloading",
+        "entities"
     );
 
     public static void setPlayerInteraction(String playerName, String interactionName, boolean b)

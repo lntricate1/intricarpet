@@ -10,7 +10,8 @@
     "intricarpetOptimizedExplosionMixin",
     "intricarpetTntBlockMixin",
     "intricarpetSlimeEntityMixin",
-    "ThreadedAnvilChunkStorageMixin"
+    "ThreadedAnvilChunkStorageMixin",
+    "ProjectileEntity_InteractionMixin"
   ],
   "client": [
   ],
