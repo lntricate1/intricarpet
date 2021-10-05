@@ -9,7 +9,9 @@
     "intricarpetServerWorldMixin",
     "intricarpetOptimizedExplosionMixin",
     "intricarpetTntBlockMixin",
-    "intricarpetSlimeEntityMixin"
+    "intricarpetSlimeEntityMixin",
+    "ThreadedAnvilChunkStorageMixin",
+    "ProjectileEntity_InteractionMixin"
   ],
   "client": [
   ],
