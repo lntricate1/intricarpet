@@ -7,7 +7,9 @@
     "intricarpet_Entity_scarpetEventsMixin",
     "intricarpetExplosionMixin",
     "intricarpetServerWorldMixin",
-    "intricarpetOptimizedExplosionMixin"
+    "intricarpetOptimizedExplosionMixin",
+    "intricarpetTntBlockMixin",
+    "intricarpetSlimeEntityMixin"
   ],
   "client": [
   ],

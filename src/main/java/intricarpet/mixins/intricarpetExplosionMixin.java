@@ -19,7 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.ExplosionBehavior;
 
-@Mixin(Explosion.class)
+@Mixin(value = Explosion.class, priority = 899)
 public abstract class intricarpetExplosionMixin
 {
     @Shadow @Final private List<BlockPos> affectedBlocks;
