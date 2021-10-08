@@ -13,7 +13,7 @@ import net.minecraft.entity.projectile.ProjectileEntity;
 @Mixin(ProjectileEntity.class)
 public abstract class ProjectileEntity_InteractionMixin
 {
-    @Inject(method = "method_26958", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "canHit", at = @At("HEAD"), cancellable = true)
     private void canHit(Entity entity, CallbackInfoReturnable<Boolean> cir)
     {
         if(entity instanceof PlayerEntity)
