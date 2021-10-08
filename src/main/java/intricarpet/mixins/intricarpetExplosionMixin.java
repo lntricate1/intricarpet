@@ -19,7 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.ExplosionBehavior;
 
-@Mixin(value = Explosion.class, priority = 899)
+@Mixin(value = Explosion.class, priority = 10)
 public abstract class intricarpetExplosionMixin
 {
     @Shadow @Final private List<BlockPos> affectedBlocks;
@@ -49,6 +49,11 @@ public abstract class intricarpetExplosionMixin
         if (CarpetSettings.explosionNoBlockDamage)
         {
             affectedBlocks.clear();
+        }
+        if (intricarpetRules.optimizedTNTExtra)
+        {
+            intricarpet.helpers.OptimizedExplosion.doExplosionB((Explosion) (Object) this, spawnParticles);
+            ci.cancel();
         }
     }
 
