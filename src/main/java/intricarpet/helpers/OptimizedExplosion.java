@@ -1,8 +1,6 @@
 package intricarpet.helpers;
 //Author: masa
 
-import java.math.RoundingMode;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -36,8 +34,6 @@ import net.minecraft.world.explosion.Explosion;
 import carpet.logging.logHelpers.ExplosionLogHelper;
 import carpet.mixins.ExplosionAccessor;
 import carpet.CarpetSettings;
-import carpet.utils.Messenger;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import org.apache.commons.lang3.tuple.Pair;
@@ -48,20 +44,18 @@ public class OptimizedExplosion
 {
     private static List<Entity> entitylist;
     public static HashMap<Box, List<Object>> velocityList;
+    private static HashMap<BlockPos.Mutable, Float> blastResCache = new HashMap<>();
+    private static HashMap<BlockPos.Mutable, BlockState> blockStateCache = new HashMap<>();
     private static Vec3d vec3dmem;
     private static long tickmem;
     // For disabling the explosion particles and sound
     public static int explosionSound = 0;
 
     // masa's optimizations
-    private static Object2ObjectOpenHashMap<BlockPos, BlockState> stateCache = new Object2ObjectOpenHashMap<>();
-    private static Object2ObjectOpenHashMap<BlockPos, FluidState> fluidCache = new Object2ObjectOpenHashMap<>();
     private static BlockPos.Mutable posMutable = new BlockPos.Mutable(0, 0, 0);
     private static ObjectOpenHashSet<BlockPos> affectedBlockPositionsSet = new ObjectOpenHashSet<>();
     private static boolean firstRay;
     private static boolean rayCalcDone;
-    private static ArrayList<Float> chances = new ArrayList<>();
-    private static BlockPos blastChanceLocation;
 
     // Creating entity list for scarpet event
     private static List<Entity> entityList = new ArrayList<>();
@@ -71,23 +65,6 @@ public class OptimizedExplosion
         
         entityList.clear();
         boolean eventNeeded = EXPLOSION_OUTCOME.isNeeded() && !eAccess.getWorld().isClient();
-        blastCalc(e);
-
-        if (!CarpetSettings.explosionNoBlockDamage) {
-            rayCalcDone = false;
-            firstRay = true;
-            getAffectedPositionsOnPlaneY(e,  0,  0, 15,  0, 15); // bottom
-            getAffectedPositionsOnPlaneY(e, 15,  0, 15,  0, 15); // top
-            getAffectedPositionsOnPlaneX(e,  0,  1, 14,  0, 15); // west
-            getAffectedPositionsOnPlaneX(e, 15,  1, 14,  0, 15); // east
-            getAffectedPositionsOnPlaneZ(e,  0,  1, 14,  1, 14); // north
-            getAffectedPositionsOnPlaneZ(e, 15,  1, 14,  1, 14); // south
-            stateCache.clear();
-            fluidCache.clear();
-
-            e.getAffectedBlocks().addAll(affectedBlockPositionsSet);
-            affectedBlockPositionsSet.clear();
-        }
 
         float f3 = eAccess.getPower() * 2.0F;
         int k1 = MathHelper.floor(eAccess.getX() - (double) f3 - 1.0D);
@@ -108,15 +85,26 @@ public class OptimizedExplosion
             for(Entity e_ : entitylist)
             {
                 Box box = e_.getBoundingBox();
-                if(velocityList != null && velocityList.containsKey(box))
-                {
-                    newVelocityList.put(box, velocityList.get(box));
-                    continue;
-                }
-                List<Object> result = getVelocity(vec3d, f3, e_, e_.getPos(), box, e_.getEyeY(), e_ instanceof TntEntity);
-                newVelocityList.put(box, result);
+                if(newVelocityList != null && newVelocityList.containsKey(box)) continue;
+                newVelocityList.put(box, getVelocity(vec3d, f3, e_, e_.getPos(), box, e_.getEyeY(), e_ instanceof TntEntity));
             }
             velocityList = newVelocityList;
+            blastResCache.clear();
+            blockStateCache.clear();
+        }
+
+        if (!CarpetSettings.explosionNoBlockDamage) {
+            rayCalcDone = false;
+            firstRay = true;
+            getAffectedPositionsOnPlaneY(e,  0,  0, 15,  0, 15); // bottom
+            getAffectedPositionsOnPlaneY(e, 15,  0, 15,  0, 15); // top
+            getAffectedPositionsOnPlaneX(e,  0,  1, 14,  0, 15); // west
+            getAffectedPositionsOnPlaneX(e, 15,  1, 14,  0, 15); // east
+            getAffectedPositionsOnPlaneZ(e,  0,  1, 14,  1, 14); // north
+            getAffectedPositionsOnPlaneZ(e, 15,  1, 14,  1, 14); // south
+
+            e.getAffectedBlocks().addAll(affectedBlockPositionsSet);
+            affectedBlockPositionsSet.clear();
         }
 
         explosionSound++;
@@ -313,63 +301,6 @@ public class OptimizedExplosion
         lst.remove(lst.size() - 1);
     }
 
-    private static void rayCalcs(Explosion e) {
-        ExplosionAccessor eAccess = (ExplosionAccessor) e;
-        boolean first = true;
-
-        for (int j = 0; j < 16; ++j) {
-            for (int k = 0; k < 16; ++k) {
-                for (int l = 0; l < 16; ++l) {
-                    if (j == 0 || j == 15 || k == 0 || k == 15 || l == 0 || l == 15) {
-                        double d0 = (double) ((float) j / 15.0F * 2.0F - 1.0F);
-                        double d1 = (double) ((float) k / 15.0F * 2.0F - 1.0F);
-                        double d2 = (double) ((float) l / 15.0F * 2.0F - 1.0F);
-                        double d3 = Math.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
-                        d0 = d0 / d3;
-                        d1 = d1 / d3;
-                        d2 = d2 / d3;
-                        float rand = eAccess.getWorld().random.nextFloat();
-                        if (CarpetSettings.tntRandomRange >= 0) {
-                            rand = (float) CarpetSettings.tntRandomRange;
-                        }
-                        float f = eAccess.getPower() * (0.7F + rand * 0.6F);
-                        double d4 = eAccess.getX();
-                        double d6 = eAccess.getY();
-                        double d8 = eAccess.getZ();
-
-                        for (float f1 = 0.3F; f > 0.0F; f -= 0.22500001F) {
-                            BlockPos blockpos = new BlockPos(d4, d6, d8);
-                            BlockState state = eAccess.getWorld().getBlockState(blockpos);
-                            FluidState fluidState = eAccess.getWorld().getFluidState(blockpos);
-
-                            if (state.getMaterial() != Material.AIR) {
-                                float f2 = Math.max(state.getBlock().getBlastResistance(), fluidState.getBlastResistance());
-                                if (eAccess.getEntity() != null)
-                                    f2 = eAccess.getEntity().getEffectiveExplosionResistance(e, eAccess.getWorld(), blockpos, state, fluidState, f2);
-                                f -= (f2 + 0.3F) * 0.3F;
-                            }
-
-                            if (f > 0.0F && (eAccess.getEntity() == null ||
-                                    eAccess.getEntity().canExplosionDestroyBlock(e, eAccess.getWorld(), blockpos, state, f)))
-                            {
-                                affectedBlockPositionsSet.add(blockpos);
-                            }
-                            else if (first) {
-                                return;
-                            }
-
-                            first = false;
-
-                            d4 += d0 * 0.30000001192092896D;
-                            d6 += d1 * 0.30000001192092896D;
-                            d8 += d2 * 0.30000001192092896D;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     private static void getAffectedPositionsOnPlaneX(Explosion e, int x, int yStart, int yEnd, int zStart, int zEnd)
     {
         if (!rayCalcDone)
@@ -453,42 +384,47 @@ public class OptimizedExplosion
         double posY = eAccess.getY();
         double posZ = eAccess.getZ();
 
-        for (float f1 = 0.3F; size > 0.0F; size -= 0.22500001F)
+        for (; size > 0.0F; size -= 0.22500001F)
         {
             posMutable.set(posX, posY, posZ);
 
-            // Don't query already cached positions again from the world
-            BlockState state = stateCache.get(posMutable);
-            FluidState fluid = fluidCache.get(posMutable);
             BlockPos posImmutable = null;
 
-            if (state == null)
+            // Don't query already cached positions again from the world
+            if (!blastResCache.containsKey(posMutable))
             {
                 posImmutable = posMutable.toImmutable();
-                state = eAccess.getWorld().getBlockState(posImmutable);
-                stateCache.put(posImmutable, state);
-                fluid = eAccess.getWorld().getFluidState(posImmutable);
-                fluidCache.put(posImmutable, fluid);
-            }
-
-            if (state.getMaterial() != Material.AIR)
-            {
-                float resistance = Math.max(state.getBlock().getBlastResistance(), fluid.getBlastResistance());
-
-                if (eAccess.getEntity() != null)
+                BlockState state = eAccess.getWorld().getBlockState(posImmutable);
+                FluidState fluid = eAccess.getWorld().getFluidState(posImmutable);
+                Float resistance = null;
+                if (state.getMaterial() != Material.AIR)
                 {
-                    resistance = eAccess.getEntity().getEffectiveExplosionResistance(e, eAccess.getWorld(), posMutable, state, fluid, resistance);
+                    resistance = Math.max(state.getBlock().getBlastResistance(), fluid.getBlastResistance());
+                    if (eAccess.getEntity() != null)
+                    {
+                        resistance = eAccess.getEntity().getEffectiveExplosionResistance(e, eAccess.getWorld(), posMutable, state, fluid, resistance);
+                    }
                 }
-
-                size -= (resistance + 0.3F) * 0.3F;
+                blockStateCache.put(posMutable, state);
+                blastResCache.put(posMutable, resistance);
             }
 
-            if (size > 0.0F)
+            Float blastRes = blastResCache.get(posMutable);
+            BlockState state = blockStateCache.get(posMutable);
+
+            if(blastRes != null)
             {
-                if ((eAccess.getEntity() == null || eAccess.getEntity().canExplosionDestroyBlock(e, eAccess.getWorld(), posMutable, state, size)))
-                    affectedBlockPositionsSet.add(posImmutable != null ? posImmutable : posMutable.toImmutable());
+                size -= (blastRes + 0.3F) * 0.3F;
+                if (size > 0.0F)
+                {
+                    if (eAccess.getEntity() == null || eAccess.getEntity().canExplosionDestroyBlock(e, eAccess.getWorld(), posMutable, state, size))
+                    {
+                        affectedBlockPositionsSet.add(posImmutable != null ? posImmutable : posMutable.toImmutable());
+                        blastResCache.put(posMutable, null);
+                    }
+                }
             }
-            else if (firstRay)
+            if (size <= 0.0F && firstRay)
             {
                 rayCalcDone = true;
                 return true;
@@ -502,113 +438,5 @@ public class OptimizedExplosion
         }
 
         return false;
-    }
-
-    public static void setBlastChanceLocation(BlockPos p){
-        blastChanceLocation = p;
-    }
-
-    private static void blastCalc(Explosion e){
-        ExplosionAccessor eAccess = (ExplosionAccessor) e;
-        if(blastChanceLocation == null || blastChanceLocation.getSquaredDistance(eAccess.getX(), eAccess.getY(), eAccess.getZ(), false) > 200) return;
-        chances.clear();
-        for (int j = 0; j < 16; ++j) {
-            for (int k = 0; k < 16; ++k) {
-                for (int l = 0; l < 16; ++l) {
-                    if (j == 0 || j == 15 || k == 0 || k == 15 || l == 0 || l == 15) {
-                        double d0 = (double) ((float) j / 15.0F * 2.0F - 1.0F);
-                        double d1 = (double) ((float) k / 15.0F * 2.0F - 1.0F);
-                        double d2 = (double) ((float) l / 15.0F * 2.0F - 1.0F);
-                        double d3 = Math.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
-                        d0 = d0 / d3;
-                        d1 = d1 / d3;
-                        d2 = d2 / d3;
-                        float f = eAccess.getPower() * (0.7F + 0.6F);
-                        double d4 = eAccess.getX();
-                        double d6 = eAccess.getY();
-                        double d8 = eAccess.getZ();
-                        boolean found = false;
-
-                        for (float f1 = 0.3F; f > 0.0F; f -= 0.22500001F) {
-                            BlockPos blockpos = new BlockPos(d4, d6, d8);
-                            BlockState state = eAccess.getWorld().getBlockState(blockpos);
-                            FluidState fluidState = eAccess.getWorld().getFluidState(blockpos);
-
-                            if (state.getMaterial() != Material.AIR) {
-                                float f2 = Math.max(state.getBlock().getBlastResistance(), fluidState.getBlastResistance());
-                                if (eAccess.getEntity() != null)
-                                    f2 = eAccess.getEntity().getEffectiveExplosionResistance(e, eAccess.getWorld(), blockpos, state, fluidState, f2);
-                                f -= (f2 + 0.3F) * 0.3F;
-                            }
-
-                            if (f > 0.0F && (eAccess.getEntity() == null ||
-                                    eAccess.getEntity().canExplosionDestroyBlock(e, eAccess.getWorld(), blockpos, state, f))) {
-                                if(!found && blockpos.equals(blastChanceLocation)){
-                                    chances.add(f);
-                                    found = true;
-                                }
-                            }
-
-                            d4 += d0 * 0.30000001192092896D;
-                            d6 += d1 * 0.30000001192092896D;
-                            d8 += d2 * 0.30000001192092896D;
-                        }
-                    }
-                }
-            }
-        }
-
-        //showTNTblastChance(e);
-    }
-
-    private static void showTNTblastChance(Explosion e){
-        ExplosionAccessor eAccess = (ExplosionAccessor) e;
-        double randMax = 0.6F * eAccess.getPower();
-        double total = 0;
-        boolean fullyBlownUp = false;
-        boolean first = true;
-        int rays = 0;
-        for(float f3 : chances){
-            rays++;
-            double calc = f3 - randMax;
-            if(calc > 0) fullyBlownUp = true;
-            double chancePerRay = (Math.abs(calc) / randMax);
-            if(!fullyBlownUp){
-                if(first){
-                    first = false;
-                    total = chancePerRay;
-                }else {
-                    total = total * chancePerRay;
-                }
-            }
-        }
-        if(fullyBlownUp) total = 0;
-        double chance = 1 - total;
-        NumberFormat nf = NumberFormat.getNumberInstance();
-        nf.setRoundingMode (RoundingMode.DOWN);
-        nf.setMaximumFractionDigits(2);
-        for(PlayerEntity player : eAccess.getWorld().getPlayers()){
-            Messenger.m(player,"w Pop: ",
-                    "c " + nf.format(chance) + " ",
-                    "^w Chance for the block to be destroyed by the blast: " + chance,
-                    "?" + chance,
-                    "w Remain: ",
-                    String.format("c %.2f ", total),
-                    "^w Chance the block survives the blast: " + total,
-                    "?" + total,
-                    "w Rays: ",
-                    String.format("c %d ", rays),
-                    "^w TNT blast rays going through the block",
-                    "?" + rays,
-                    "w Size: ",
-                    String.format("c %.1f ", eAccess.getPower()),
-                    "^w TNT blast size",
-                    "?" + eAccess.getPower(),
-                    "w @: ",
-                    String.format("c [%.1f %.1f %.1f] ", eAccess.getX(), eAccess.getY(), eAccess.getZ()),
-                    "^w TNT blast location X:" + eAccess.getX() + " Y:" + eAccess.getY() + " Z:" + eAccess.getZ(),
-                    "?" + eAccess.getX() + " " + eAccess.getY() + " " + eAccess.getZ()
-            );
-        }
     }
 }
