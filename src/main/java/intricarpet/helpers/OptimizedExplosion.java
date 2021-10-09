@@ -42,58 +42,67 @@ import static carpet.script.CarpetEventServer.Event.EXPLOSION_OUTCOME;
 
 public class OptimizedExplosion
 {
-    private static List<Entity> entitylist;
+    // intricate's optimizations
     public static HashMap<Box, List<Object>> velocityList;
     private static HashMap<BlockPos.Mutable, Float> blastResCache = new HashMap<>();
     private static HashMap<BlockPos.Mutable, BlockState> blockStateCache = new HashMap<>();
-    private static Vec3d vec3dmem;
-    private static long tickmem;
-    // For disabling the explosion particles and sound
-    public static int explosionSound = 0;
 
     // masa's optimizations
+    private static List<Entity> entitylist;
     private static BlockPos.Mutable posMutable = new BlockPos.Mutable(0, 0, 0);
     private static ObjectOpenHashSet<BlockPos> affectedBlockPositionsSet = new ObjectOpenHashSet<>();
     private static boolean firstRay;
     private static boolean rayCalcDone;
+    private static Vec3d vec3dmem;
+    private static long tickmem;
+    
+    // For disabling the explosion particles and sound
+    public static int explosionSound = 0;
 
     // Creating entity list for scarpet event
     private static List<Entity> entityList = new ArrayList<>();
 
-    public static void doExplosionA(Explosion e, ExplosionLogHelper eLogger) {
+    public static void doExplosionA(Explosion e, ExplosionLogHelper eLogger)
+    {
         ExplosionAccessor eAccess = (ExplosionAccessor) e;
-        
-        entityList.clear();
-        boolean eventNeeded = EXPLOSION_OUTCOME.isNeeded() && !eAccess.getWorld().isClient();
+        World world = eAccess.getWorld();
+        boolean eventNeeded = EXPLOSION_OUTCOME.isNeeded() && !world.isClient();
+        float pow = eAccess.getPower() * 2.0F;
 
-        float f3 = eAccess.getPower() * 2.0F;
-        int k1 = MathHelper.floor(eAccess.getX() - (double) f3 - 1.0D);
-        int l1 = MathHelper.floor(eAccess.getX() + (double) f3 + 1.0D);
-        int i2 = MathHelper.floor(eAccess.getY() - (double) f3 - 1.0D);
-        int i1 = MathHelper.floor(eAccess.getY() + (double) f3 + 1.0D);
-        int j2 = MathHelper.floor(eAccess.getZ() - (double) f3 - 1.0D);
-        int j1 = MathHelper.floor(eAccess.getZ() + (double) f3 + 1.0D);
         Vec3d vec3d = new Vec3d(eAccess.getX(), eAccess.getY(), eAccess.getZ());
 
-        if (vec3dmem == null || !vec3dmem.equals(vec3d) || tickmem != eAccess.getWorld().getTime()) {
+        // Check if explosion is in a different position or tick
+        if (vec3dmem == null || !vec3dmem.equals(vec3d) || tickmem != world.getTime()) {
             vec3dmem = vec3d;
-            tickmem = eAccess.getWorld().getTime();
-            entitylist = eAccess.getWorld().getOtherEntities(null, new Box(k1, i2, j2, l1, i1, j1));
+            tickmem = world.getTime();
+
+            // Get Box to check for entities
+            int k1 = MathHelper.floor(eAccess.getX() - (double) pow - 1.0D);
+            int l1 = MathHelper.floor(eAccess.getX() + (double) pow + 1.0D);
+            int i2 = MathHelper.floor(eAccess.getY() - (double) pow - 1.0D);
+            int i1 = MathHelper.floor(eAccess.getY() + (double) pow + 1.0D);
+            int j2 = MathHelper.floor(eAccess.getZ() - (double) pow - 1.0D);
+            int j1 = MathHelper.floor(eAccess.getZ() + (double) pow + 1.0D);
+
+            entitylist = world.getOtherEntities(null, new Box(k1, i2, j2, l1, i1, j1));
             explosionSound = 0;
 
             HashMap<Box, List<Object>> newVelocityList = new HashMap<>();
             for(Entity e_ : entitylist)
             {
                 Box box = e_.getBoundingBox();
+
+                // Only calculate if not already calculated
                 if(newVelocityList != null && newVelocityList.containsKey(box)) continue;
-                newVelocityList.put(box, getVelocity(vec3d, f3, e_, e_.getPos(), box, e_.getEyeY(), e_ instanceof TntEntity));
+                newVelocityList.put(box, getVelocity(vec3d, pow, e_, e_.getPos(), box, e_.getEyeY(), e_ instanceof TntEntity));
             }
             velocityList = newVelocityList;
             blastResCache.clear();
             blockStateCache.clear();
         }
 
-        if (!CarpetSettings.explosionNoBlockDamage) {
+        // TNT below -7 or above 168 cannot break blocks
+        if (!CarpetSettings.explosionNoBlockDamage && vec3d.y < 168 && vec3d.y > -7) {
             rayCalcDone = false;
             firstRay = true;
             getAffectedPositionsOnPlaneY(e,  0,  0, 15,  0, 15); // bottom
@@ -113,12 +122,14 @@ public class OptimizedExplosion
         for (int k2 = 0; k2 < entitylist.size(); ++k2) {
             Entity entity = entitylist.get(k2);
 
+            // Quickly remove self from entity list
             if (entity == explodingEntity) {
                 removeFast(entitylist, k2);
                 k2--;
                 continue;
             }
 
+            // If entity is another tnt and in the same position, use the precalculated value. Does not apply velocity because it assumes the compressed tnt is all on a block.
             if (entity instanceof TntEntity && explodingEntity != null &&
                     entity.getX() == explodingEntity.getX() &&
                     entity.getY() == explodingEntity.getY() &&
@@ -132,20 +143,26 @@ public class OptimizedExplosion
             if (!entity.isImmuneToExplosion())
             {
                 Box box = entity.getBoundingBox();
-                List<Object> velResult = velocityList.get(box);
 
+                // Get cached velocity
+                List<Object> velResult = velocityList.get(box);
                 Vec3d vel = (Vec3d) velResult.get(0);
                 Vec3d velTransformed = (Vec3d) velResult.get(1);
                 float damage = (float) velResult.get(2);
 
+                // Add to scarpet event
                 if (eventNeeded) entityList.add(entity);
 
-                entity.damage(e.getDamageSource(), damage);
-
+                // Add to logger
                 if (eLogger != null) eLogger.onEntityImpacted(entity, velTransformed);
 
+                // Damage entity
+                entity.damage(e.getDamageSource(), damage);
+
+                // Knockback entity
                 entity.setVelocity(entity.getVelocity().add(velTransformed));
 
+                // Add to affected players map
                 if (entity instanceof PlayerEntity) {
                     PlayerEntity player = (PlayerEntity) entity;
                     if (!player.isSpectator()
@@ -219,7 +236,7 @@ public class OptimizedExplosion
 
         if (damagesTerrain)
         {
-            ObjectArrayList<Pair<ItemStack, BlockPos>> objectArrayList = new ObjectArrayList();
+            ObjectArrayList<Pair<ItemStack, BlockPos>> objectArrayList = new ObjectArrayList<>();
             Collections.shuffle(e.getAffectedBlocks(), world.random);
 
             for (BlockPos blockpos : e.getAffectedBlocks())
@@ -233,8 +250,8 @@ public class OptimizedExplosion
                     {
                         BlockEntity blockEntity = state.hasBlockEntity() ? world.getBlockEntity(blockpos) : null;  //hasBlockEntity()
 
-                        LootContext.Builder lootBuilder = (new LootContext.Builder((ServerWorld)eAccess.getWorld()))
-                                .random(eAccess.getWorld().random)
+                        LootContext.Builder lootBuilder = (new LootContext.Builder((ServerWorld) world))
+                                .random(world.random)
                                 .parameter(LootContextParameters.ORIGIN, Vec3d.ofCenter(blockpos))
                                 .parameter(LootContextParameters.TOOL, ItemStack.EMPTY)
                                 .optionalParameter(LootContextParameters.BLOCK_ENTITY, blockEntity)
@@ -281,7 +298,7 @@ public class OptimizedExplosion
         int i = objectArrayList.size();
 
         for(int j = 0; j < i; ++j) {
-            Pair<ItemStack, BlockPos> pair = (Pair)objectArrayList.get(j);
+            Pair<ItemStack, BlockPos> pair = (Pair<ItemStack, BlockPos>) objectArrayList.get(j);
             ItemStack itemStack2 = pair.getLeft();
             if (ItemEntity.canMerge(itemStack2, itemStack)) {
                 ItemStack itemStack3 = ItemEntity.merge(itemStack2, itemStack, 16);
@@ -377,7 +394,8 @@ public class OptimizedExplosion
         double xInc = (xRel / len) * 0.3;
         double yInc = (yRel / len) * 0.3;
         double zInc = (zRel / len) * 0.3;
-        float rand = eAccess.getWorld().random.nextFloat();
+        World world = eAccess.getWorld();
+        float rand = world.random.nextFloat();
         float sizeRand = (CarpetSettings.tntRandomRange >= 0 ? (float) CarpetSettings.tntRandomRange : rand);
         float size = eAccess.getPower() * (0.7F + sizeRand * 0.6F);
         double posX = eAccess.getX();
@@ -394,15 +412,15 @@ public class OptimizedExplosion
             if (!blastResCache.containsKey(posMutable))
             {
                 posImmutable = posMutable.toImmutable();
-                BlockState state = eAccess.getWorld().getBlockState(posImmutable);
-                FluidState fluid = eAccess.getWorld().getFluidState(posImmutable);
+                BlockState state = world.getBlockState(posImmutable);
+                FluidState fluid = world.getFluidState(posImmutable);
                 Float resistance = null;
                 if (state.getMaterial() != Material.AIR)
                 {
                     resistance = Math.max(state.getBlock().getBlastResistance(), fluid.getBlastResistance());
                     if (eAccess.getEntity() != null)
                     {
-                        resistance = eAccess.getEntity().getEffectiveExplosionResistance(e, eAccess.getWorld(), posMutable, state, fluid, resistance);
+                        resistance = eAccess.getEntity().getEffectiveExplosionResistance(e, world, posMutable, state, fluid, resistance);
                     }
                 }
                 blockStateCache.put(posMutable, state);
@@ -417,10 +435,11 @@ public class OptimizedExplosion
                 size -= (blastRes + 0.3F) * 0.3F;
                 if (size > 0.0F)
                 {
-                    if (eAccess.getEntity() == null || eAccess.getEntity().canExplosionDestroyBlock(e, eAccess.getWorld(), posMutable, state, size))
+                    if (eAccess.getEntity() == null || eAccess.getEntity().canExplosionDestroyBlock(e, world, posMutable, state, size))
                     {
                         affectedBlockPositionsSet.add(posImmutable != null ? posImmutable : posMutable.toImmutable());
                         blastResCache.put(posMutable, null);
+                        blockStateCache.remove(posMutable);
                     }
                 }
             }
