@@ -16,4 +16,10 @@ public class intricarpetOptimizedExplosionMixin
     {
         if(intricarpetRules.optimizedTNTExtra) ci.cancel();
     }
+
+    @Inject(method = "doExplosionB", at = @At("HEAD"), cancellable = true)
+    private static void cancelDoExplosionB(CallbackInfo ci)
+    {
+        if(intricarpetRules.optimizedTNTExtra) ci.cancel();
+    }
 }
