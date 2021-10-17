@@ -5,8 +5,10 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "CrashReport_noopMixin",
-    "intricarpetServerWorldMixin",
-    "intricarpet_Entity_scarpetEventsMixin",
+    
+    "logger.explosions.ServerWorldMixin",
+
+    "carpet.scarpet.Entity_EventMixin",
 
     "rule.optimizedTNTExtra.ExplosionMixin",
     "rule.optimizedTNTExtra.OptimizedExplosionMixin",
