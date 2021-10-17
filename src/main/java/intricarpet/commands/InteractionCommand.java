@@ -1,4 +1,4 @@
-package intricarpet;
+package intricarpet.commands;
 
 import carpet.utils.Messenger;
 

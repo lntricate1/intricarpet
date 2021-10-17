@@ -5,6 +5,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import carpet.CarpetExtension;
 import carpet.CarpetServer;
 import carpet.settings.SettingsManager;
+import intricarpet.commands.InteractionCommand;
 import intricarpet.helpers.Interactions;
 import intricarpet.logging.intricarpetLoggerRegisty;
 import net.minecraft.server.command.ServerCommandSource;
