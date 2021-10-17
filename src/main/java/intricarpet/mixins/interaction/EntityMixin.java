@@ -1,4 +1,4 @@
-package intricarpet.mixins;
+package intricarpet.mixins.interaction;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import intricarpet.helpers.Interactions;
 
 @Mixin(Entity.class)
-public abstract class Entity_InteractionMixin
+public abstract class EntityMixin
 {
     @Shadow public abstract Text getName();
     @Shadow public abstract boolean isSneaking();

@@ -1,4 +1,4 @@
-package intricarpet.mixins;
+package intricarpet.mixins.rule.optimizedTNTExtra;
 
 import net.minecraft.world.explosion.Explosion;
 import intricarpet.intricarpetRules;
@@ -20,7 +20,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.explosion.ExplosionBehavior;
 
 @Mixin(value = Explosion.class, priority = 10)
-public abstract class intricarpetExplosionMixin
+public abstract class ExplosionMixin
 {
     @Shadow @Final private List<BlockPos> affectedBlocks;
 

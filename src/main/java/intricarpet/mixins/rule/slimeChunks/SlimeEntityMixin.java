@@ -1,4 +1,4 @@
-package intricarpet.mixins;
+package intricarpet.mixins.rule.slimeChunks;
 
 import java.util.Random;
 
@@ -19,7 +19,7 @@ import net.minecraft.world.gen.ChunkRandom;
 import net.minecraft.world.StructureWorldAccess;
 
 @Mixin(SlimeEntity.class)
-public class intricarpetSlimeEntityMixin
+public class SlimeEntityMixin
 {
     @Inject(method = "canSpawn", at = @At(value = "INVOKE",
     target = "Lnet/minecraft/util/math/ChunkPos;<init>(Lnet/minecraft/util/math/BlockPos;)V"),

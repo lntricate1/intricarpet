@@ -1,4 +1,4 @@
-package intricarpet.mixins;
+package intricarpet.mixins.interaction;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -11,7 +11,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 
 @Mixin(ProjectileEntity.class)
-public abstract class ProjectileEntity_InteractionMixin
+public abstract class ProjectileEntityMixin
 {
     @Inject(method = "method_26958", at = @At("HEAD"), cancellable = true)
     private void canHit(Entity entity, CallbackInfoReturnable<Boolean> cir)

@@ -55,6 +55,7 @@ public class OptimizedExplosion
     private static boolean rayCalcDone;
     private static Vec3d vec3dmem;
     private static long tickmem;
+    public static int entitiesTicked = 0;
     
     // For disabling the explosion particles and sound
     public static int explosionSound = 0;
@@ -72,7 +73,7 @@ public class OptimizedExplosion
         Vec3d vec3d = new Vec3d(eAccess.getX(), eAccess.getY(), eAccess.getZ());
 
         // Check if explosion is in a different position or tick
-        if (vec3dmem == null || !vec3dmem.equals(vec3d) || tickmem != world.getTime()) {
+        if (entitiesTicked > 1 || vec3dmem == null || !vec3dmem.equals(vec3d) || tickmem != world.getTime()) {
             vec3dmem = vec3d;
             tickmem = world.getTime();
 
@@ -100,6 +101,8 @@ public class OptimizedExplosion
             blastResCache.clear();
             blockStateCache.clear();
         }
+
+        entitiesTicked = 0;
 
         // TNT below -7 or above 168 cannot break blocks
         if (!CarpetSettings.explosionNoBlockDamage && vec3d.y < 168 && vec3d.y > -7) {

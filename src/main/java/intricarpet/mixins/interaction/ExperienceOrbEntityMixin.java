@@ -1,4 +1,4 @@
-package intricarpet.mixins;
+package intricarpet.mixins.interaction;
 
 import java.util.Iterator;
 import java.util.function.Predicate;
@@ -15,7 +15,7 @@ import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.world.World;
 
 @Mixin(ExperienceOrbEntity.class)
-public class ExperienceOrbEntity_InteractionMixin
+public class ExperienceOrbEntityMixin
 {
     @Redirect(method = "tick", at = @At(
         value = "INVOKE",
