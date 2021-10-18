@@ -22,6 +22,7 @@
     "interaction.PlayerEntityMixin",
     "interaction.ProjectileEntityMixin",
     "interaction.ExperienceOrbEntityMixin",
+    "interaction.AbstractMinecartEntityMixin",
     "interaction.ServerPlayNetworkHandlerMixin"
   ],
   "client": [

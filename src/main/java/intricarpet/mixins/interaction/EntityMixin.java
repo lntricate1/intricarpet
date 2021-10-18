@@ -33,7 +33,7 @@ public abstract class EntityMixin
         if(entity instanceof PlayerEntity)
             playerName = entity.getName().getString();
         else if(((Object) this) instanceof PlayerEntity)
-            playerName = this.getName().getString();
+            playerName = ((PlayerEntity) (Object) this).getName().getString();
         else b1 = false;
         
         if(b1 && Interactions.onlinePlayerMap.containsKey(playerName) &&
