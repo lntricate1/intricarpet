@@ -17,9 +17,10 @@
     "rule.optimizedTNTExtra.EntityMixin",
 
     "interaction.ThreadedAnvilChunkStorageMixin",
-    "interaction.ProjectileEntityMixin",
-    "interaction.PlayerEntityMixin",
     "interaction.EntityMixin",
+    "interaction.LivingEntityMixin",
+    "interaction.PlayerEntityMixin",
+    "interaction.ProjectileEntityMixin",
     "interaction.ExperienceOrbEntityMixin",
     "interaction.ServerPlayNetworkHandlerMixin"
   ],
