@@ -21,13 +21,14 @@ public class Interactions
         "updates"
     );
 
-    public static void setPlayerInteraction(String playerName, String interactionName, boolean b)
+    public static void setPlayerInteraction(String playerName, String interactionName, boolean b, boolean online)
     {
+        if(playerFromName(playerName) == null) return;
         if(interactionName.equals("all"))
             for(String x : Interactions.interactionList)
                 if(!x.equals("all"))
                 {
-                    if(playerFromName(playerName) != null)
+                    if(online)
                     {
                         if(!onlinePlayerMap.containsKey(playerName)) onlinePlayerMap.put(playerName, new HashSet<>());
                         if(b) onlinePlayerMap.get(playerName).add(x);
@@ -42,7 +43,7 @@ public class Interactions
                         if(offlinePlayerMap.get(playerName).size() == 0) offlinePlayerMap.remove(playerName);
                     }
                 }
-        if(playerFromName(playerName) != null)
+        if(online)
         {
             if(!onlinePlayerMap.containsKey(playerName)) onlinePlayerMap.put(playerName, new HashSet<>());
             if(b) onlinePlayerMap.get(playerName).add(interactionName);
@@ -65,7 +66,7 @@ public class Interactions
         {
             for(String x : offlinePlayerMap.get(playerName))
             {
-                setPlayerInteraction(playerName, x, true);
+                setPlayerInteraction(playerName, x, true, true);
             }
             offlinePlayerMap.remove(playerName);
         }
@@ -78,7 +79,7 @@ public class Interactions
         {
             for(String x : onlinePlayerMap.get(playerName))
             {
-                setPlayerInteraction(playerName, x, true);
+                setPlayerInteraction(playerName, x, true, false);
             }
             onlinePlayerMap.remove(playerName);
         }

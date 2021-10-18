@@ -47,7 +47,7 @@ public class InteractionCommand
             Messenger.m(source, "r Unknown interaction: ","rb "+interactionName);
             return 0;
         }
-        Interactions.setPlayerInteraction(playerName, interactionName, !b);
+        Interactions.setPlayerInteraction(playerName, interactionName, !b, true);
         Messenger.m(source, "w Set interaction ", "g " + interactionName, "w  to ", "g " + b);
         return 1;
     }
