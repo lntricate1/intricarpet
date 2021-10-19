@@ -14,10 +14,10 @@ import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.scoreboard.AbstractTeam;
 
 @Mixin(EntityPredicates.class)
-@SuppressWarnings("unchecked")
 public class EntityPredicatesMixin
 {
     @Overwrite
+    @SuppressWarnings("unchecked")
     public static Predicate<Entity> canBePushedBy(Entity entity) {
         AbstractTeam abstractTeam = entity.getScoreboardTeam();
         AbstractTeam.CollisionRule collisionRule = abstractTeam == null ? AbstractTeam.CollisionRule.ALWAYS : abstractTeam.getCollisionRule();
