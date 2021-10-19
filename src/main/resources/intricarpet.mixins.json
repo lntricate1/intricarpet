@@ -18,6 +18,7 @@
 
     "interaction.ThreadedAnvilChunkStorageMixin",
     "interaction.EntityMixin",
+    "interaction.EntityPredicatesMixin",
     "interaction.LivingEntityMixin",
     "interaction.PlayerEntityMixin",
     "interaction.ProjectileEntityMixin",
