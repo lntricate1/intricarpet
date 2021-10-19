@@ -1,4 +1,4 @@
-package intricarpet.mixins;
+package intricarpet.mixins.rule.disableTNTChainReaction;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -9,7 +9,7 @@ import intricarpet.intricarpetRules;
 import net.minecraft.block.TntBlock;
 
 @Mixin(TntBlock.class)
-public class intricarpetTntBlockMixin
+public class TntBlockMixin
 {
     @Inject(method = "onDestroyedByExplosion", at = @At("HEAD"), cancellable = true)
     private void noChainMixin(CallbackInfo ci)

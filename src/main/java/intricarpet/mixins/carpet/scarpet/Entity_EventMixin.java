@@ -1,4 +1,4 @@
-package intricarpet.mixins;
+package intricarpet.mixins.carpet.scarpet;
 
 import carpet.fakes.EntityInterface;
 import carpet.script.EntityEventsGroup;
@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Entity.class)
-public abstract class intricarpet_Entity_scarpetEventsMixin implements EntityInterface
+public abstract class Entity_EventMixin implements EntityInterface
 {
     @Shadow private Vec3d pos, velocity;
 

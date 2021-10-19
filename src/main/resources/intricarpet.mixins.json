@@ -5,19 +5,26 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "CrashReport_noopMixin",
-    "intricarpet_Entity_scarpetEventsMixin",
-    "intricarpetExplosionMixin",
-    "intricarpetServerWorldMixin",
-    "intricarpetOptimizedExplosionMixin",
-    "intricarpetTntBlockMixin",
-    "intricarpetSlimeEntityMixin",
-    "ThreadedAnvilChunkStorageMixin",
+    
+    "logger.explosions.ServerWorldMixin",
 
-    "ProjectileEntity_InteractionMixin",
-    "PlayerEntity_InteractionMixin",
-    "Entity_InteractionMixin",
-    "ExperienceOrbEntity_InteractionMixin",
-    "ServerPlayNetworkHandler_InteractionMixin"
+    "carpet.scarpet.Entity_EventMixin",
+
+    "rule.optimizedTNTExtra.ExplosionMixin",
+    "rule.optimizedTNTExtra.OptimizedExplosionMixin",
+    "rule.disableTNTChainReaction.TntBlockMixin",
+    "rule.slimeChunks.SlimeEntityMixin",
+    "rule.optimizedTNTExtra.EntityMixin",
+
+    "interaction.ThreadedAnvilChunkStorageMixin",
+    "interaction.EntityMixin",
+    "interaction.EntityPredicatesMixin",
+    "interaction.LivingEntityMixin",
+    "interaction.PlayerEntityMixin",
+    "interaction.ProjectileEntityMixin",
+    "interaction.ExperienceOrbEntityMixin",
+    "interaction.AbstractMinecartEntityMixin",
+    "interaction.ServerPlayNetworkHandlerMixin"
   ],
   "client": [
   ],

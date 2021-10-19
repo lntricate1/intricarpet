@@ -1,4 +1,4 @@
-package intricarpet.mixins;
+package intricarpet.mixins.interaction;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -20,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import intricarpet.helpers.Interactions;
 
 @Mixin(Entity.class)
-public abstract class Entity_InteractionMixin
+public abstract class EntityMixin
 {
     @Shadow public abstract Text getName();
     @Shadow public abstract boolean isSneaking();
@@ -33,7 +33,7 @@ public abstract class Entity_InteractionMixin
         if(entity instanceof PlayerEntity)
             playerName = entity.getName().getString();
         else if(((Object) this) instanceof PlayerEntity)
-            playerName = this.getName().getString();
+            playerName = ((PlayerEntity) (Object) this).getName().getString();
         else b1 = false;
         
         if(b1 && Interactions.onlinePlayerMap.containsKey(playerName) &&

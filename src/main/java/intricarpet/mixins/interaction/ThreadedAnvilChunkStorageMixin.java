@@ -1,4 +1,4 @@
-package intricarpet.mixins;
+package intricarpet.mixins.interaction;
 
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;

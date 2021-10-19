@@ -1,4 +1,4 @@
-package intricarpet.mixins;
+package intricarpet.mixins.rule.optimizedTNTExtra;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -9,7 +9,7 @@ import carpet.helpers.OptimizedExplosion;
 import intricarpet.intricarpetRules;
 
 @Mixin(OptimizedExplosion.class)
-public class intricarpetOptimizedExplosionMixin
+public class OptimizedExplosionMixin
 {
     @Inject(method = "doExplosionA", at = @At("HEAD"), cancellable = true)
     private static void cancelDoExplosionA(CallbackInfo ci)

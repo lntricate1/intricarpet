@@ -1,4 +1,4 @@
-package intricarpet.mixins;
+package intricarpet.mixins.interaction;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -11,9 +11,9 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.world.World;
 
 @Mixin(PlayerEntity.class)
-public abstract class PlayerEntity_InteractionMixin extends LivingEntity
+public abstract class PlayerEntityMixin extends LivingEntity
 {
-    protected PlayerEntity_InteractionMixin(EntityType<? extends LivingEntity> entityType, World world)
+    protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world)
     {
         super(entityType, world);
     }

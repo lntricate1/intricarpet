@@ -1,4 +1,4 @@
-package intricarpet.mixins;
+package intricarpet.mixins.logger.explosions;
 
 import net.minecraft.server.world.ServerWorld;
 import intricarpet.logging.logHelpers.intricarpetExplosionLogHelper;
@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerWorld.class)
-public class intricarpetServerWorldMixin
+public class ServerWorldMixin
 {
     @Inject(method = "tick", at = @At("TAIL"))
     private void onTickEnd(CallbackInfo ci)
