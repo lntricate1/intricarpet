@@ -24,6 +24,7 @@ public class SlimeEntityMixin
     @Inject(method = "canSpawn", at = @At(value = "INVOKE",
     target = "Lnet/minecraft/util/math/ChunkPos;<init>(Lnet/minecraft/util/math/BlockPos;)V"),
     cancellable = true)
+    @SuppressWarnings("unused")
     private static void newCanSpawn(EntityType<SlimeEntity> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random, CallbackInfoReturnable<Boolean> cir)
     {
         switch (intricarpetRules.slimeChunks)
