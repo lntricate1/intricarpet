@@ -36,7 +36,7 @@ public class ExplosionLogHelperMixin
 
     private boolean newTick;
 
-    @Overwrite
+    @Overwrite(remap = false)
     public void onExplosionDone(long gametime)
     {
         newTick = false;
