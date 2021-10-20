@@ -9,6 +9,7 @@
     "logger.explosions.ServerWorldMixin",
 
     "carpet.scarpet.Entity_EventMixin",
+    "carpet.ExplosionLogHelperMixin",
 
     "rule.optimizedTNTExtra.ExplosionMixin",
     "rule.optimizedTNTExtra.OptimizedExplosionMixin",

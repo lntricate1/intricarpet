@@ -26,7 +26,6 @@ public class intricarpetExplosionLogHelper extends ExplosionLogHelper
 
     public void onExplosionDone(long gametime)
     {
-        List<BaseText> messages = new ArrayList<>();
         if (lastGametime != gametime)
         {
             explosionCountInCurretPos = 0;
@@ -37,6 +36,7 @@ public class intricarpetExplosionLogHelper extends ExplosionLogHelper
         }
         LoggerRegistry.getLogger("explosions").log((option) ->
         {
+            List<BaseText> messages = new ArrayList<>();
             if ("compact".equals(option))
             {
                 if (previousPosition != null && !pos.equals(previousPosition))
@@ -69,11 +69,11 @@ public class intricarpetExplosionLogHelper extends ExplosionLogHelper
                         "d " + explosionCountInCurretPos + "x ",
                         Messenger.dblt("l", previousPosition.x, previousPosition.y, previousPosition.z), (affectBlocks)?"m  (affects blocks)":"m  (doesn't affect blocks)",
                         "g  (", "d " + (System.currentTimeMillis() - startTime), "g ms)"));
-                    previousPosition = null;
-                    startTime = 0;
                 }
             }
             return messages.toArray(new BaseText[0]);
         });
+        previousPosition = null;
+        startTime = 0;
     }
 }
