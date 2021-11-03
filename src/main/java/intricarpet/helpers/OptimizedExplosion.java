@@ -89,13 +89,17 @@ public class OptimizedExplosion
             explosionSound = 0;
 
             HashMap<Box, List<Object>> newVelocityList = new HashMap<>();
-            for(Entity e_ : entitylist)
+            for(int i = 0; i < entitylist.size(); ++i)
             {
+                Entity e_ = entityList.get(i);
                 Box box = e_.getBoundingBox();
 
                 // Only calculate if not already calculated
                 if(newVelocityList != null && newVelocityList.containsKey(box)) continue;
-                newVelocityList.put(box, getVelocity(vec3d, pow, e_, e_.getPos(), box, e_.getEyeY(), e_ instanceof TntEntity));
+                List<Object> vel = getVelocity(vec3d, pow, e_, e_.getPos(), box, e_.getEyeY(), e_ instanceof TntEntity);
+                if(vel != null)
+                    newVelocityList.put(box, vel);
+                else entityList.remove(i);
             }
             velocityList = newVelocityList;
             blastResCache.clear();
