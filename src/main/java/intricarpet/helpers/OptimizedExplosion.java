@@ -91,7 +91,7 @@ public class OptimizedExplosion
             HashMap<Box, List<Object>> newVelocityList = new HashMap<>();
             for(int i = 0; i < entitylist.size(); ++i)
             {
-                Entity e_ = entityList.get(i);
+                Entity e_ = entitylist.get(i);
                 Box box = e_.getBoundingBox();
 
                 // Only calculate if not already calculated
@@ -99,7 +99,7 @@ public class OptimizedExplosion
                 List<Object> vel = getVelocity(vec3d, pow, e_, e_.getPos(), box, e_.getEyeY(), e_ instanceof TntEntity);
                 if(vel != null)
                     newVelocityList.put(box, vel);
-                else entityList.remove(i);
+                else entitylist.remove(i);
             }
             velocityList = newVelocityList;
             blastResCache.clear();
