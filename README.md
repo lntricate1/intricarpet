@@ -1,6 +1,6 @@
 # Intricate's Carpet Addons: "intricarpet"
 ## Supported Versions
-For now, only `1.16.5`.
+`1.16.5` and `1.17.1`
 ## Features
 ### Rules
 `optimizedTNTExtra`: EVEN MORE optimized tnt.
