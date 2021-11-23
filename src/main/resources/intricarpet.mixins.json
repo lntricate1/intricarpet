@@ -7,9 +7,9 @@
     "CrashReport_noopMixin",
     
     "logger.explosions.ServerWorldMixin",
+    "logger.explosions.ExplosionLogHelperMixin",
 
     "carpet.scarpet.Entity_EventMixin",
-    "carpet.ExplosionLogHelperMixin",
 
     "rule.optimizedTNTExtra.ExplosionMixin",
     "rule.optimizedTNTExtra.OptimizedExplosionMixin",

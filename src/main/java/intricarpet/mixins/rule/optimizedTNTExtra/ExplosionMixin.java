@@ -2,7 +2,7 @@ package intricarpet.mixins.rule.optimizedTNTExtra;
 
 import net.minecraft.world.explosion.Explosion;
 import intricarpet.intricarpetRules;
-import intricarpet.logging.logHelpers.intricarpetExplosionLogHelper;
+import carpet.logging.logHelpers.ExplosionLogHelper;
 import carpet.logging.LoggerRegistry;
 import carpet.CarpetSettings;
 import org.spongepowered.asm.mixin.Mixin;
@@ -26,16 +26,22 @@ public abstract class ExplosionMixin
 
     @Shadow @Final private World world;
 
-    private intricarpetExplosionLogHelper logger;
+    private ExplosionLogHelper logger;
 
     @Inject(method = "collectBlocksAndDamageEntities", at = @At("HEAD"), cancellable = true)
-    private void betterOptimization(CallbackInfo ci)
+    private void doExplosionA(CallbackInfo ci)
     {
         if(intricarpetRules.optimizedTNTExtra)
         {
             intricarpet.helpers.OptimizedExplosion.doExplosionA((Explosion) (Object) this, logger);
             ci.cancel();
+            return;
         }
+        if (CarpetSettings.optimizedTNT)
+        {
+            carpet.helpers.OptimizedExplosion.doExplosionA((Explosion) (Object) this, logger);
+        }
+        ci.cancel();
     }
 
     @Inject(method = "affectWorld", at = @At("HEAD"), cancellable = true)
@@ -54,7 +60,13 @@ public abstract class ExplosionMixin
         {
             intricarpet.helpers.OptimizedExplosion.doExplosionB((Explosion) (Object) this, spawnParticles);
             ci.cancel();
+            return;
         }
+        if (CarpetSettings.optimizedTNT)
+        {
+            carpet.helpers.OptimizedExplosion.doExplosionB((Explosion) (Object) this, spawnParticles);
+        }
+        ci.cancel();
     }
 
     @Inject(method = "<init>(Lnet/minecraft/world/World;Lnet/minecraft/entity/Entity;Lnet/minecraft/entity/damage/DamageSource;Lnet/minecraft/world/explosion/ExplosionBehavior;DDDFZLnet/minecraft/world/explosion/Explosion$DestructionType;)V",
@@ -63,7 +75,7 @@ public abstract class ExplosionMixin
     {
         if (LoggerRegistry.__explosions && ! world.isClient)
         {
-            logger = new intricarpetExplosionLogHelper(entity, x, y, z, power, createFire, destructionType);
+            logger = new ExplosionLogHelper(entity, x, y, z, power, createFire, destructionType);
         }
     }
 }
