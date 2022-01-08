@@ -28,7 +28,7 @@ public class intricarpetExplosionLogHelper
                         "d " + explosionCountInCurrentPos + "x ",
                         Messenger.dblt("l", previousPosition.x, previousPosition.y, previousPosition.z), (affectBlocks)?"m  (affects blocks)":"m  (doesn't affect blocks)",
                         "g  (", "d " + (System.currentTimeMillis() - startTime), "g ms)",
-                        Messenger.c("r  [Tp]", String.format("!/tp %.3f %.3f %.3f", previousPosition.x, previousPosition.y, previousPosition.z))));
+                        Messenger.c("p  [Tp]", String.format("!/tp %.3f %.3f %.3f", previousPosition.x, previousPosition.y, previousPosition.z))));
                 }
             }
             return messages.toArray(new BaseText[0]);

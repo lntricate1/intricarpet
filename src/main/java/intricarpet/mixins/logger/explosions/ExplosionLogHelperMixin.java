@@ -64,13 +64,13 @@ public class ExplosionLogHelperMixin
             {
                 messages.add(c("d #" + explosionCountInCurretGT,"gb ->",
                         Messenger.dblt("l", pos.x, pos.y, pos.z),
-                        Messenger.c("r  [Tp]", String.format("!/tp %.3f %.3f %.3f", pos.x, pos.y, pos.z)),
+                        Messenger.c("p  [Tp]", String.format("!/tp %.3f %.3f %.3f", pos.x, pos.y, pos.z)),
                         (affectBlocks)?"m  (affects blocks)":"m  (doesn't affect blocks)" ));
             }
             if ("full".equals(option))
             {
                 messages.add(c("d #" + explosionCountInCurretGT,"gb ->", Messenger.dblt("l", pos.x, pos.y, pos.z),
-                    Messenger.c("r  [Tp]", String.format("!/tp %.3f %.3f %.3f", pos.x, pos.y, pos.z))));
+                    Messenger.c("p  [Tp]", String.format("!/tp %.3f %.3f %.3f", pos.x, pos.y, pos.z))));
                 messages.add(c("w   affects blocks: ", "m " + this.affectBlocks));
                 messages.add(c("w   creates fire: ", "m " + this.createFire));
                 messages.add(c("w   power: ", "c " + this.power));
@@ -100,7 +100,7 @@ public class ExplosionLogHelperMixin
                         "d " + explosionCountInCurrentPos + "x ",
                         Messenger.dblt("l", previousPosition.x, previousPosition.y, previousPosition.z), (affectBlocks)?"m  (affects blocks)":"m  (doesn't affect blocks)",
                         "g  (", "d " + (System.currentTimeMillis() - startTime), "g ms)",
-                        Messenger.c("r  [Tp]", String.format("!/tp %.3f %.3f %.3f", previousPosition.x, previousPosition.y, previousPosition.z))));
+                        Messenger.c("p  [Tp]", String.format("!/tp %.3f %.3f %.3f", previousPosition.x, previousPosition.y, previousPosition.z))));
                     previousPosition = pos;
                     intricarpetExplosionLogHelper.previousPosition = pos;
                     explosionCountInCurrentPos = 0;
