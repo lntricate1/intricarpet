@@ -8,6 +8,7 @@
     
     "logger.explosions.ServerWorldMixin",
     "logger.explosions.ExplosionLogHelperMixin",
+    "logger.tnt.TNTLogHelperMixin",
 
     "carpet.scarpet.Entity_EventMixin",
 

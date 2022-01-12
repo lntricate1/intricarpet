@@ -21,31 +21,39 @@ public class TNTLogHelperMixin
     @Overwrite(remap = false)
     public void onExploded(double x, double y, double z, long gametime)
     {
-        if (!(lastGametime == gametime)){
+        if (!(lastGametime == gametime))
+        {
             tntCount = 0;
             lastGametime = gametime;
         }
         tntCount++;
         LoggerRegistry.getLogger("tnt").log( (option) -> {
+            double eyes = 1.12;
             switch (option)
             {
                 case "brief":
                     return new BaseText[]{Messenger.c(
-                            "l P ",Messenger.dblt("l", primedX, primedY, primedZ),
-                            Messenger.c("p  [Tp]", String.format("!/tp %.3f %.3f %.3f", primedX, primedY, primedZ)),
-                            "w  ",Messenger.dblt("l", primedAngle.x, primedAngle.y, primedAngle.z),
-                            "r  E ",Messenger.dblt("r", x, y, z),
-                            Messenger.c("p  [Tp]", String.format("!/tp %.3f %.3f %.3f", x, y, z)))};
+                        "l ",Messenger.dblt("l", primedX, primedY, primedZ),
+                        Messenger.c("p  [Tp]", String.format("!/tp %.3f %.3f %.3f", primedX, primedY, primedZ)),
+                        Messenger.c("p  [TpEyes]", String.format("!/tp %.3f %.3f %.3f", primedX, primedY - eyes, primedZ)),
+                        "w  ",Messenger.dblt("m", primedAngle.x, primedAngle.y, primedAngle.z),
+                        "w  ",Messenger.dblt("r", x, y, z),
+                        Messenger.c("p  [Tp]", String.format("!/tp %.3f %.3f %.3f", x, y, z)),
+                        Messenger.c("p  [TpEyes]", String.format("!/tp %.3f %.3f %.3f", x, y - eyes, z))
+                    )};
                 case "full":
                     return new BaseText[]{Messenger.c(
-                            "r #" + tntCount,
-                            "m @" + gametime,
-                            "g : ",
-                            "l P ",Messenger.dblf("l",primedX,primedY,primedZ),
-                            Messenger.c("p  [Tp]", String.format("!/tp %.3f %.3f %.3f", primedX, primedY, primedZ)),
-                            "w  ",Messenger.dblf("l", primedAngle.x, primedAngle.y, primedAngle.z),
-                            "r  E ",Messenger.dblf("r",x, y, z),
-                            Messenger.c("p  [Tp]", String.format("!/tp %.3f %.3f %.3f", x, y, z)))};
+                        "r #" + tntCount,
+                        "m @" + gametime,
+                        "g : ",
+                        "l ",Messenger.dblf("l",primedX,primedY,primedZ),
+                        Messenger.c("p  [Tp]", String.format("!/tp %.3f %.3f %.3f", primedX, primedY, primedZ)),
+                        Messenger.c("p  [TpEyes]", String.format("!/tp %.3f %.3f %.3f", primedX, primedY - eyes, primedZ)),
+                        "w  ",Messenger.dblf("m", primedAngle.x, primedAngle.y, primedAngle.z),
+                        "r  ",Messenger.dblf("r",x, y, z),
+                        Messenger.c("p  [Tp]", String.format("!/tp %.3f %.3f %.3f", x, y, z)),
+                        Messenger.c("p  [TpEyes]", String.format("!/tp %.3f %.3f %.3f", x, y - eyes, z))
+                    )};
             }
             return null;
         });
