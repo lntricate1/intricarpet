@@ -65,13 +65,17 @@ public class ExplosionLogHelperMixin
             List<BaseText> messages = new ArrayList<>();
             if(newTick) messages.add(c("wb tick : ", "d " + gametime));
             if ("brief".equals(option))
+            {
+                String e = "null";
+                if(entity != null) e = EntityType.getId(entity.getType()).toString();
                 messages.add(c("d #" + explosionCountInCurretGT,"gb :",
                     Messenger.dblt("l", pos.x, pos.y, pos.z),
                     Messenger.c("p  [Tp]", String.format("!/tp %.3f %.3f %.3f", pos.x, pos.y, pos.z)),
                     Messenger.c("p  [TpEyes]", String.format("!/tp %.3f %.3f %.3f", pos.x, pos.y - eyes, pos.z)),
                     (affectBlocks)?"m  damage":"m  no damage",
-                    Messenger.c("r  " + EntityType.getId(entity.getType()))
+                    Messenger.c("r  " + e)
                 ));
+            }
             if ("full".equals(option))
             {
                 messages.add(c("d #" + explosionCountInCurretGT,"gb :", Messenger.dblt("l", pos.x, pos.y, pos.z),
