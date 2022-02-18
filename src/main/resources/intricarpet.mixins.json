@@ -17,6 +17,8 @@
     "rule.disableTNTChainReaction.TntBlockMixin",
     "rule.slimeChunks.SlimeEntityMixin",
     "rule.optimizedTNTExtra.EntityMixin",
+    "rule.fallingBlockThreadSleep.FallingBlockMixin",
+    "rule.instantScheduling.ServerTickSchedulerMixin",
 
     "interaction.ThreadedAnvilChunkStorageMixin",
     "interaction.EntityMixin",
