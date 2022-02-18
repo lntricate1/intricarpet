@@ -1,10 +1,7 @@
 package intricarpet.mixins.rule.instantScheduling;
 
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.function.Predicate;
 
-import com.google.common.collect.Sets;
 
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,7 +13,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import intricarpet.intricarpetRules;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.font.TrueTypeFontLoader;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.server.world.ServerTickScheduler;
