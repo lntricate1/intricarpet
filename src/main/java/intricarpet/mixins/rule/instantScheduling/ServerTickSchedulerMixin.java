@@ -52,8 +52,11 @@ public class ServerTickSchedulerMixin<T>
             if(intricarpetRules.instantScheduling.equals("false")) addScheduledTick(tick);
             else
             {
-                if(object instanceof Block && !intricarpetRules.instantScheduling.equals("fluids")) tickBlock(tick);
-                if(object instanceof Fluid && !intricarpetRules.instantScheduling.equals("blocks")) tickFluid(tick);
+                if(object instanceof Block)
+                    if(intricarpetRules.instantScheduling.equals("fluids")) addScheduledTick(tick); else tickBlock(tick);
+                if(object instanceof Fluid){
+                    if(intricarpetRules.instantScheduling.equals("blocks")) addScheduledTick(tick); else tickFluid(tick);
+                }
             }
         }
         ci.cancel();
