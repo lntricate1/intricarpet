@@ -12,6 +12,11 @@
 
     "carpet.scarpet.Entity_EventMixin",
 
+    "carpet.scarpet.AbstractDecorationEntity_scarpetEventsMixin",
+    "carpet.scarpet.AbstractMinecartEntity_scarpetEventsMixin",
+    "carpet.scarpet.EndCrystalEntity_scarpetEventsMixin",
+    "carpet.scarpet.TntEntity_scarpetEventsMixin",
+
     "rule.optimizedTNTExtra.ExplosionMixin",
     "rule.optimizedTNTExtra.OptimizedExplosionMixin",
     "rule.disableTNTChainReaction.TntBlockMixin",
