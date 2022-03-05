@@ -56,7 +56,7 @@ public class OptimizedExplosion
     private static Vec3d vec3dmem;
     private static long tickmem;
     public static int entitiesTicked = 0;
-    
+
     // For disabling the explosion particles and sound
     public static int explosionSound = 0;
 
@@ -209,7 +209,7 @@ public class OptimizedExplosion
 
     public static void doExplosionB(Explosion e, boolean spawnParticles)
     {
-        ExplosionAccessor eAccess = (ExplosionAccessor) e; 
+        ExplosionAccessor eAccess = (ExplosionAccessor) e;
         World world = eAccess.getWorld();
         double posX = eAccess.getX();
         double posY = eAccess.getY();

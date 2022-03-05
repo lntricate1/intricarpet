@@ -25,4 +25,4 @@ public abstract class AbstractMinecartEntity_scarpetEventsMixin extends Entity
         // calling extra on_tick because falling blocks do not fall back to super tick call
         ((EntityInterface)this).getEventContainer().onEvent(EntityEventsGroup.Event.ON_TICK);
     }
-} 
+}

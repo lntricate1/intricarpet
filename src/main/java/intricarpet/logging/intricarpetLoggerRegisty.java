@@ -6,7 +6,7 @@ import carpet.logging.LoggerRegistry;
 public class intricarpetLoggerRegisty
 {
     public static boolean __explosions;
-    
+
     public static void registerLoggers()
     {
         LoggerRegistry.registerLogger("explosions", defaultStandardLogger("explosions", "brief", new String[]{"compact", "brief", "full"}));

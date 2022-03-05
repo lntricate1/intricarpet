@@ -84,7 +84,7 @@ public class Interactions
             onlinePlayerMap.remove(playerName);
         }
     }
-    
+
     protected static ServerPlayerEntity playerFromName(String name)
     {
         return CarpetServer.minecraft_server.getPlayerManager().getPlayer(name);
