@@ -11,9 +11,9 @@ import net.minecraft.entity.Entity;
 @Mixin(Entity.class)
 public class EntityMixin
 {
-    @Inject(method = "setPos", at = @At("HEAD"))
-    private void countEntityMovements(CallbackInfo ci)
-    {
-        OptimizedExplosion.entitiesTicked ++;
-    }
+  @Inject(method = "setPos", at = @At("HEAD"))
+  private void countEntityMovements(CallbackInfo ci)
+  {
+    OptimizedExplosion.entitiesTicked ++;
+  }
 }
