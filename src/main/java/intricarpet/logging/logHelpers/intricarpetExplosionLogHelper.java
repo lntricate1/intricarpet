@@ -24,7 +24,7 @@ public class intricarpetExplosionLogHelper
             {
                 if(previousPosition != null)
                 {
-                    messages.add(Messenger.c("d #" + explosionCountInCurrentGt + " ","gb -> ",
+                    messages.add((BaseText)Messenger.c("d #" + explosionCountInCurrentGt + " ","gb -> ",
                         "d " + explosionCountInCurrentPos + "x ",
                         Messenger.dblt("l", previousPosition.x, previousPosition.y, previousPosition.z), (affectBlocks)?"m  (affects blocks)":"m  (doesn't affect blocks)",
                         "g  (", "d " + (System.currentTimeMillis() - startTime), "g ms)",

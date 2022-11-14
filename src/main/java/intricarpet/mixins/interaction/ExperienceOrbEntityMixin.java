@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 @Mixin(ExperienceOrbEntity.class)
 public class ExperienceOrbEntityMixin
 {
-    @Redirect(method = "tick", at = @At(
+    @Redirect(method = "expensiveUpdate", at = @At(
         value = "INVOKE",
         target = "Lnet/minecraft/world/World;getClosestPlayer(Lnet/minecraft/entity/Entity;D)Lnet/minecraft/entity/player/PlayerEntity;"
     ))

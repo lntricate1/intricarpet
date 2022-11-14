@@ -16,7 +16,7 @@ public class intricarpetLoggerRegisty
     {
         try
         {
-            return new Logger(intricarpetLoggerRegisty.class.getField("__"+logName), logName, def, options);
+            return new Logger(intricarpetLoggerRegisty.class.getField("__"+logName), logName, def, options, false);
         }
         catch (NoSuchFieldException e)
         {
@@ -28,7 +28,7 @@ public class intricarpetLoggerRegisty
     {
         try
         {
-            return new Logger(LoggerRegistry.class.getField("__"+logName), logName, def, options);
+            return new Logger(LoggerRegistry.class.getField("__"+logName), logName, def, options, false);
         }
         catch (NoSuchFieldException e)
         {

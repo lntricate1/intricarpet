@@ -21,24 +21,24 @@ import net.minecraft.world.StructureWorldAccess;
 @Mixin(SlimeEntity.class)
 public class SlimeEntityMixin
 {
-    @Inject(method = "canSpawn", at = @At(value = "INVOKE",
-    target = "Lnet/minecraft/util/math/ChunkPos;<init>(Lnet/minecraft/util/math/BlockPos;)V"),
-    cancellable = true)
-    @SuppressWarnings("unused")
-    private static void newCanSpawn(EntityType<SlimeEntity> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random, CallbackInfoReturnable<Boolean> cir)
+  @Inject(method = "canSpawn", at = @At(value = "INVOKE",
+  target = "Lnet/minecraft/util/math/ChunkPos;<init>(Lnet/minecraft/util/math/BlockPos;)V"),
+  cancellable = true)
+  @SuppressWarnings("unused")
+  private static void newCanSpawn(EntityType<SlimeEntity> type, WorldAccess world, SpawnReason spawnReason, BlockPos pos, Random random, CallbackInfoReturnable<Boolean> cir)
+  {
+    switch (intricarpetRules.slimeChunks)
     {
-        switch (intricarpetRules.slimeChunks)
-        {
-            case "none":
-                cir.setReturnValue(false);
-            break;
-            case "all":
-                ChunkPos chunkPos = new ChunkPos(pos);
-                // The check is unused, but I'm leaving this here to not change the rng
-                boolean bl = ChunkRandom.getSlimeRandom(chunkPos.x, chunkPos.z, ((StructureWorldAccess)world).getSeed(), 987234911L).nextInt(10) == 0;
-                if (random.nextInt(10) == 0 && pos.getY() < 40)
-                    cir.setReturnValue(MobEntity.canMobSpawn(type, world, spawnReason, pos, random));
-            break;
-        }
+      case "none":
+        cir.setReturnValue(false);
+      break;
+      case "all":
+        ChunkPos chunkPos = new ChunkPos(pos);
+        // The check is unused, but I'm leaving this here to not change the rng
+        boolean bl = ChunkRandom.getSlimeRandom(chunkPos.x, chunkPos.z, ((StructureWorldAccess)world).getSeed(), 987234911L).nextInt(10) == 0;
+        if (random.nextInt(10) == 0 && pos.getY() < 40)
+            cir.setReturnValue(MobEntity.canMobSpawn(type, world, spawnReason, pos, random));
+      break;
     }
+  }
 }
