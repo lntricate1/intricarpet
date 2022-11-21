@@ -28,7 +28,7 @@ task buildAndGather {
           exclude '*-dev.gar', '*-sources.jar'
         }
         into 'build/libs/'
-        duplicateStrategy duplicateStrategy.INCLUDE
+        duplicatesStrategy duplicatesStrategy.INCLUDE
       }
     }
   }

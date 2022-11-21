@@ -27,9 +27,4 @@ public class intricarpetRules
     options = {"false", "fluids", "blocks", "all"},
     category = "intricate")
   public static String instantScheduling = "false";
-
-  @Rule(desc = "Number of ticks between each entity position packet sent to the client",
-    extra = {"Must be a positive integer, set to -1 to disable"},
-    category = "intricate")
-  public static int entityPacketInterval = -1;
 }

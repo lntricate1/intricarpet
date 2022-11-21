@@ -85,10 +85,6 @@ tasks.withType(JavaCompile) {
   options.warnings = false
 }
 
-tasks.withType(JavaExec) {
-  jvmArgs = ['-Xms4096m', '-Xmx4096m']
-}
-
 java {
   // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
   // if it is present.
