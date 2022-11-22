@@ -3,7 +3,7 @@
 `1.16.5` and `1.17.1`.
 ## Features
 ### Rules
-`optimizedTNTExtra`: EVEN MORE optimized tnt.
+~~`optimizedTNTExtra`: EVEN MORE optimized tnt.~~ This rule is broken and needs to be fixed, it's not included in releases until then.
 
 `disableTNTChainReaction`: Makes TNT only get broken but not ignited when blown up.
 
@@ -24,4 +24,4 @@ Syntax: `interaction [interaction_name] [true/false]`
 ### Logging
 `/log explosions compact`: Groups explosions by position, reduces spam in big cannons and makes it easier to find different positions in a sea of explosions.
 ### Scarpet
-`on_move` entity event: Gets called every time an entity changes position, at the `TAIL` of the `setPos` method. Required arguments: `entity, motion, pos1, pos2`.
+`on_move` entity event: Gets called every time an entity changes position, at the `TAIL` of the `setPos` method. Required arguments: `entity, motion, pos1, pos2`. This is only included in the 1.16.5 release, since after then it is part of the main carpet mod.
