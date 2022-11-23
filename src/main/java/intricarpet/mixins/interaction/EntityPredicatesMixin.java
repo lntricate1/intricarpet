@@ -17,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(EntityPredicates.class)
 public class EntityPredicatesMixin
 {
-    @Inject(method = "canBePushedBy", at = @At("RETURN"))
+    @Inject(method = "canBePushedBy", at = @At("RETURN"), cancellable = true)
     private static void canBePushedBy(Entity entity, CallbackInfoReturnable<Predicate<Entity>> cir) {
         if (entity instanceof PlayerEntity) {
             String playerName = entity.getName().getString();
