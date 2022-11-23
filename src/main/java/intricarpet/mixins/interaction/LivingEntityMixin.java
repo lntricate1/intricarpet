@@ -14,21 +14,21 @@ public abstract class LivingEntityMixin
     @Inject(method="isAffectedBySplashPotions", at=@At("HEAD"),cancellable = true)
     public void isAffectedBySplashPotions(CallbackInfoReturnable<Boolean> cir)
     {
-        if(((Object) this) instanceof PlayerEntity)
-        {
+        if(((Object) this) instanceof PlayerEntity) {
             String playerName = ((PlayerEntity) (Object) this).getName().getString();
-            if(Interactions.onlinePlayerMap.containsKey(playerName) &&
-                Interactions.onlinePlayerMap.get(playerName).contains("entities")) {
+            if (Interactions.onlinePlayerMap.containsKey(playerName) &&
+                    Interactions.onlinePlayerMap.get(playerName).contains("entities")) {
                 cir.setReturnValue(false);
                 cir.cancel();
             }
         }
     }
-    @Inject(method="isPushable",at=@At("HEAD"),cancellable = true)
-    private void isPushableMixin(CallbackInfoReturnable<Boolean> cir) {
-        if(((Object) this) instanceof PlayerEntity) {
+
+    @Inject(method = "isPushable", at = @At("HEAD"), cancellable = true)
+    private void isPushable(CallbackInfoReturnable<Boolean> cir) {
+        if (((Object) this) instanceof PlayerEntity) {
             String playerName = ((PlayerEntity) (Object) this).getName().getString();
-            if(Interactions.onlinePlayerMap.containsKey(playerName) &&
+            if (Interactions.onlinePlayerMap.containsKey(playerName) &&
                     Interactions.onlinePlayerMap.get(playerName).contains("entities")) {
                 cir.setReturnValue(false);
                 cir.cancel();

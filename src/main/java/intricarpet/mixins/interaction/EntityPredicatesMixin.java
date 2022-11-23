@@ -17,11 +17,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(EntityPredicates.class)
 public class EntityPredicatesMixin
 {
-    @Inject(method = "canBePushedBy",at=@At("RETURN"))
-    private static void canBePushedByReturnMixin(Entity entity, CallbackInfoReturnable<Predicate<Entity>> cir) {
-        if(entity instanceof PlayerEntity) {
+    @Inject(method = "canBePushedBy", at = @At("RETURN"))
+    private static void canBePushedBy(Entity entity, CallbackInfoReturnable<Predicate<Entity>> cir) {
+        if (entity instanceof PlayerEntity) {
             String playerName = entity.getName().getString();
-            if(Interactions.onlinePlayerMap.containsKey(playerName) &&
+            if (Interactions.onlinePlayerMap.containsKey(playerName) &&
                     Interactions.onlinePlayerMap.get(playerName).contains("entities")) {
                 cir.setReturnValue(Predicates.alwaysFalse());
                 cir.cancel();
