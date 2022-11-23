@@ -6,30 +6,40 @@ import carpet.CarpetExtension;
 import carpet.CarpetServer;
 import carpet.settings.SettingsManager;
 import intricarpet.commands.InteractionCommand;
+import intricarpet.helpers.AutoMixinAuditExecutor;
 import intricarpet.helpers.Interactions;
 import intricarpet.logging.intricarpetLoggerRegisty;
+import net.fabricmc.api.ModInitializer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-public class intricarpetExtension implements CarpetExtension
-{
-    public static void noop() { }
+public class intricarpetExtension implements CarpetExtension, ModInitializer {
+    public static final Logger LOGGER = LogManager.getLogger("intricarpet");
+
+    public static void noop() {
+    }
+
     public static SettingsManager intricarpetSettingsManager;
-    static
-    {
+
+    static {
         intricarpetSettingsManager = new SettingsManager("1.0", "intricarpet", "Intricate Carpet");
         CarpetServer.manageExtension(new intricarpetExtension());
     }
 
     @Override
-    public void registerLoggers()
-    {
+    public void onInitialize() {
+        AutoMixinAuditExecutor.run();
+    }
+
+    @Override
+    public void registerLoggers() {
         intricarpetLoggerRegisty.registerLoggers();
     }
 
     @Override
-    public String version()
-    {
+    public String version() {
         return "intricarpet";
     }
 

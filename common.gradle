@@ -31,11 +31,24 @@ dependencies {
 }
 
 loom {
-  runConfigs.all {
-    runDir '../../run'
-    vmArgs '-Dmixin.debug.export=true'
-    ideConfigGenerated true
-  }
+    runConfigs.all {
+        runDir '../../run'
+        vmArgs '-Dmixin.debug.export=true'
+        ideConfigGenerated true
+    }
+
+    runs {
+        mixinAudit {
+            server()
+            vmArgs '-Dcarpetamsaddition.mixin_audit=true'
+            ideConfigGenerated false
+        }
+        mixinAuditClient {
+            client()
+            vmArgs '-Dcarpetamsaddition.mixin_audit=true'
+            ideConfigGenerated false
+        }
+    }
 }
 
 remapJar {

@@ -15,14 +15,18 @@ import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.world.World;
 
 @Mixin(ExperienceOrbEntity.class)
-public class ExperienceOrbEntityMixin
-{
-    @Redirect(method = "expensiveUpdate", at = @At(
-        value = "INVOKE",
-        target = "Lnet/minecraft/world/World;getClosestPlayer(Lnet/minecraft/entity/Entity;D)Lnet/minecraft/entity/player/PlayerEntity;"
+public class ExperienceOrbEntityMixin {
+    @Redirect(method =
+            //#if MC>=11700
+            "expensiveUpdate"
+            //#else
+            //$$ "tick"
+            //#endif
+            , at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/World;getClosestPlayer(Lnet/minecraft/entity/Entity;D)Lnet/minecraft/entity/player/PlayerEntity;"
     ))
-    private PlayerEntity getClosestPlayer(World self, Entity entity, double maxDistance)
-    {
+    private PlayerEntity getClosestPlayer(World self, Entity entity, double maxDistance) {
         World world = entity.world;
         Predicate<Entity> predicate = EntityPredicates.EXCEPT_SPECTATOR;
         double x = entity.getX();
