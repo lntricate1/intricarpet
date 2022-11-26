@@ -10,7 +10,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.At;
@@ -23,13 +22,12 @@ import intricarpet.helpers.Interactions;
 public abstract class EntityMixin
 {
     @Shadow public abstract Text getName();
-    @Shadow public abstract boolean isSneaking();
 
     @Inject(method = "pushAwayFrom", at = @At("HEAD"), cancellable = true)
     private void pushAwayFrom(Entity entity, CallbackInfo ci)
     {
         String playerName = "";
-        Boolean b1 = true;
+        boolean b1 = true;
         if(entity instanceof PlayerEntity)
             playerName = entity.getName().getString();
         else if(((Object) this) instanceof PlayerEntity)
@@ -41,17 +39,19 @@ public abstract class EntityMixin
             ci.cancel();
     }
 
-    @Overwrite
-    public boolean bypassesSteppingEffects()
-    {
+
+    @Inject(method="bypassesSteppingEffects",at = @At("HEAD"),cancellable = true)
+    public void bypassesSteppingEffects(CallbackInfoReturnable<Boolean> cir) {
         if(((Object) this) instanceof PlayerEntity)
         {
             String playerName = this.getName().getString();
             if(Interactions.onlinePlayerMap.containsKey(playerName) &&
-                Interactions.onlinePlayerMap.get(playerName).contains("blocks"))
-                return true;
+                    Interactions.onlinePlayerMap.get(playerName).contains("blocks")){
+                cir.setReturnValue(true);
+                cir.cancel();
+            }
+
         }
-        return this.isSneaking();
     }
 
     @Inject(method = "fall", at = @At("HEAD"), cancellable = true)

@@ -2,6 +2,7 @@ package intricarpet;
 
 import carpet.settings.Rule;
 
+@SuppressWarnings("removal")
 public class intricarpetRules
 {
   //@Rule(desc = "EVEN MORE Optimized TNT",
