@@ -1,33 +1,20 @@
 {
   "required": true,
-  "package": "intricarpet.mixins",
+  "minVersion": "0.8",
+  "package": "me.lntricate.intricarpet.mixins",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "CrashReport_noopMixin",
+    "logger.ExplosionLogHelperMixin",
+    "logger.ServerLevelMixin",
 
-    "logger.explosions.ServerWorldMixin",
-    "logger.explosions.ExplosionLogHelperMixin",
-    "logger.tnt.TNTLogHelperMixin",
-
-    "carpet.scarpet.AbstractDecorationEntity_scarpetEventsMixin",
-    "carpet.scarpet.AbstractMinecartEntity_scarpetEventsMixin",
-    "carpet.scarpet.EndCrystalEntity_scarpetEventsMixin",
-    "carpet.scarpet.TntEntity_scarpetEventsMixin",
-
-    "rule.disableTNTChainReaction.TntBlockMixin",
-    "rule.slimeChunks.SlimeEntityMixin",
-    "rule.fallingBlockThreadSleep.FallingBlockMixin",
-    "rule.instantScheduling.ServerTickSchedulerMixin",
-
-    "interaction.ThreadedAnvilChunkStorageMixin",
-    "interaction.EntityMixin",
-    "interaction.EntityPredicatesMixin",
-    "interaction.LivingEntityMixin",
-    "interaction.PlayerEntityMixin",
-    "interaction.ProjectileEntityMixin",
-    "interaction.ExperienceOrbEntityMixin",
-    "interaction.AbstractMinecartEntityMixin",
-    "interaction.ServerPlayNetworkHandlerMixin"
+    "interactions.ChunkMapMixin",
+    "interactions.EntityMixin",
+    "interactions.EntitySelectorMixin",
+    "interactions.NaturalSpawnerMixin",
+    "interactions.ProjectileMixin",
+    "interactions.ServerChunkCacheMixin",
+    "interactions.ServerGamePacketListenerImplMixin",
+    "interactions.ServerPlayerMixin"
   ],
   "client": [
   ],

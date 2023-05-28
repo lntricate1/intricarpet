@@ -1,1 +1,0 @@
-net.minecraft.entity.projectile.ProjectileEntity canHit() net.minecraft.entity.projectile.ProjectileEntity method_26958()

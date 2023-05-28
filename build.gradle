@@ -1,21 +1,30 @@
 plugins {
   id 'maven-publish'
-  id 'fabric-loom' version '0.11-SNAPSHOT' apply false
-  id 'com.replaymod.preprocess' version '897c4096e2'
+  id 'fabric-loom' version '1.1-SNAPSHOT' apply false
+  id 'com.replaymod.preprocess' version 'e1050f4d72'
 }
 
 preprocess {
-  def mc116 = createNode('1.16.5', 1_16_05, 'yarn')
-  def mc117 = createNode('1.17.1', 1_17_01, 'yarn')
-  def mc118 = createNode('1.18.x', 1_18_02, 'yarn')
-  def mc119 = createNode('1.19.x', 1_19_02, 'yarn')
+  // def mc114 = createNode('1.14.4' , 1_14_04, 'yarn')
+  // def mc115 = createNode('1.15.2' , 1_15_02, 'yarn')
+  // def mc116 = createNode('1.16.5' , 1_16_05, 'yarn')
+  def mc117 = createNode('1.17.1' , 1_17_01, 'yarn')
+  def mc118 = createNode('1.18.2' , 1_18_02, 'yarn')
+  def mc1193 = createNode('1.19.3' , 1_19_03, 'yarn')
+  def mc1194 = createNode('1.19.4' , 1_19_04, 'yarn')
+  // def mcSnapshot = createNode('snapshot', 1_19_00, 'yarn')
 
-    mc117.link(mc116, file('versions/mapping-1.17-1.16.txt'))
-  mc117.link(mc118 , file('versions/mapping-1.17-1.18.txt'))
-  mc118.link(mc119 , file('versions/mapping-1.18-1.19.txt'))
+  // mc115.link(mc114, null)
+  // mc116.link(mc115, null)
+  // mc117.link(mc116, null)
+
+  mc117.link(mc118, null)
+  mc118.link(mc1193, null)
+  mc1193.link(mc1194, null)
+  // mc119.link(mcSnapshot, null)
 }
 
-task buildAndGather {
+tasks.register('buildAndGather') {
   subprojects {
     dependsOn project.name + ':build'
   }
@@ -26,10 +35,10 @@ task buildAndGather {
         def libDir = project.projectDir.toPath().resolve('build/libs')
         from(libDir) {
           include '*.jar'
-          exclude '*-dev.gar', '*-sources.jar'
+          exclude '*-dev.jar', '*-sources.jar'
         }
         into 'build/libs/'
-        duplicatesStrategy duplicatesStrategy.INCLUDE
+        duplicatesStrategy DuplicatesStrategy.INCLUDE
       }
     }
   }

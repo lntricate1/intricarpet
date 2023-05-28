@@ -24,32 +24,26 @@ repositories {
 dependencies {
   // loom
   minecraft "com.mojang:minecraft:${project.minecraft_version}"
-  mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+  mappings loom.officialMojangMappings()
   modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-  // mods
-  modImplementation "carpet:fabric-carpet:${project.carpet_core_version}"
+  // MixinExtras
+  include(implementation(annotationProcessor("com.github.llamalad7.mixinextras:mixinextras-fabric:0.2.0-beta.8")))
+  // Mods
+  modImplementation "carpet:fabric-carpet:${project.carpet_version}"
 }
 
 loom {
-    runConfigs.all {
-        runDir '../../run'
-        vmArgs '-Dmixin.debug.export=true'
-        ideConfigGenerated true
-    }
-
-    runs {
-        mixinAudit {
-            server()
-            vmArgs '-Dintricarpet.mixin_audit=true'
-            ideConfigGenerated false
-        }
-        mixinAuditClient {
-            client()
-            vmArgs '-Dintricarpet.mixin_audit=true'
-            ideConfigGenerated false
-        }
-    }
+  runConfigs.all {
+    // to make sure it generates all "Minecraft Client (:subproject_name)" applications
+    ideConfigGenerated true
+    runDir '../../run'
+    vmArgs '-Dmixin.debug.export=true'
+  }
 }
+
+// loom {
+//   accessWidenerPath = file("src/main/resources/modid.accesswidener")
+// }
 
 remapJar {
   remapperIsolation = true
@@ -76,17 +70,19 @@ if (System.getenv("BUILD_RELEASE") != "true") {
 String fullModVersion = project.mod_version + versionSuffix
 
 version = 'v' + fullModVersion
-group = project.parent.maven_group
-archivesBaseName = project.parent.archives_base_name + '-mc' + project.minecraft_version
+group = project.maven_group
+archivesBaseName = project.archives_base_name + '-mc' + project.minecraft_version
 
 processResources {
   inputs.property "version", fullModVersion
 
   filesMatching("fabric.mod.json") {
     def valueMap = [
-      "version": fullModVersion,
-      "carpet_dependency": project.carpet_dependency,
-      "minecraft_dependency": project.minecraft_dependency,
+        "id": project.mod_id,
+        "name": project.mod_name,
+        "version": fullModVersion,
+        "minecraft_dependency": project.minecraft_dependency,
+        "carpet_dependency": project.carpet_dependency,
     ]
     expand valueMap
   }
@@ -106,8 +102,8 @@ java {
 }
 
 jar {
-  from("../../LICENSE") {
-    rename {it}
+  from(rootProject.file('LICENSE')) {
+    rename { "${it}_${project.archivesBaseName}"}
   }
 }
 
@@ -119,9 +115,10 @@ publishing {
       from components.java
     }
   }
+
   // select the repositories you want to publish to
   repositories {
-  // uncomment to publish to the local maven
-  // mavenLocal()
+    // uncomment to publish to the local maven
+    // mavenLocal()
   }
 }
