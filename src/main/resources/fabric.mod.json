@@ -4,7 +4,7 @@
   "version": "${version}",
 
   "name": "${name}",
-  "description": "Carpet addons useful for TNT tech",
+  "description": "A carpet extension useful for TNT tech.",
   "authors": [
     "lntricate"
   ],
