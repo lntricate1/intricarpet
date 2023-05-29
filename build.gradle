@@ -19,7 +19,7 @@ preprocess {
   // mc117.link(mc116, null)
 
   mc117.link(mc118, null)
-  mc118.link(mc1193, null)
+  mc118.link(mc1193, file('versions/mapping-1.18.2-1.19.3.txt'))
   mc1193.link(mc1194, null)
   // mc119.link(mcSnapshot, null)
 }

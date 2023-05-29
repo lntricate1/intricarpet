@@ -47,14 +47,21 @@ public class ServerGamePacketListenerImplMixin
     CarpetSettings.impendingFillSkipUpdates.set(false);
   }
 
-  @Inject(method = "handlePlayerAction", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerPlayerGameMode;handleBlockBreakAction(Lnet/minecraft/core/BlockPos;Lnet/minecraft/network/protocol/game/ServerboundPlayerActionPacket$Action;Lnet/minecraft/core/Direction;I)V"))
+  private static final String handleBlockBreakAction =
+  //#if MC >= 11900
+  //$$ "Lnet/minecraft/server/level/ServerPlayerGameMode;handleBlockBreakAction(Lnet/minecraft/core/BlockPos;Lnet/minecraft/network/protocol/game/ServerboundPlayerActionPacket$Action;Lnet/minecraft/core/Direction;II)V";
+  //#else
+    "Lnet/minecraft/server/level/ServerPlayerGameMode;handleBlockBreakAction(Lnet/minecraft/core/BlockPos;Lnet/minecraft/network/protocol/game/ServerboundPlayerActionPacket$Action;Lnet/minecraft/core/Direction;I)V";
+  //#endif
+
+  @Inject(method = "handlePlayerAction", at = @At(value = "INVOKE", target = handleBlockBreakAction))
   private void beforeBreakBlock(ServerboundPlayerActionPacket packet, CallbackInfo ci)
   {
     if(!((IServerPlayer)player).getInteraction(Interaction.UPDATES))
       CarpetSettings.impendingFillSkipUpdates.set(true);
   }
 
-  @Inject(method = "handlePlayerAction", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerPlayerGameMode;handleBlockBreakAction(Lnet/minecraft/core/BlockPos;Lnet/minecraft/network/protocol/game/ServerboundPlayerActionPacket$Action;Lnet/minecraft/core/Direction;I)V", shift = Shift.AFTER))
+  @Inject(method = "handlePlayerAction", at = @At(value = "INVOKE", target = handleBlockBreakAction, shift = Shift.AFTER))
   private void afterBreakBlock(ServerboundPlayerActionPacket packet, CallbackInfo ci)
   {
     CarpetSettings.impendingFillSkipUpdates.set(false);

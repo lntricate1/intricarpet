@@ -5,5 +5,5 @@ import net.minecraft.world.level.ChunkPos;
 
 public interface IChunkMap
 {
-  public boolean noPlayersCloseWithInteraction(ChunkPos chunkPos, Interaction interaction);
+  public boolean anyPlayerCloseWithInteraction(ChunkPos chunkPos, Interaction interaction);
 }

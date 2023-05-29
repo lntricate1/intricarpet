@@ -23,9 +23,17 @@ public class ChunkMapMixin implements IChunkMap
   @Shadow @Final private PlayerMap playerMap;
 
   @Override
-  public boolean noPlayersCloseWithInteraction(ChunkPos chunkPos, Interaction interaction)
+  public boolean anyPlayerCloseWithInteraction(ChunkPos chunkPos, Interaction interaction)
   {
-    return playerMap.getPlayers(chunkPos.toLong()).noneMatch(player -> ((IServerPlayer)player).getInteraction(interaction) && euclideanDistanceSquared(chunkPos, player) < 16384.0);
+    //#if MC >= 11800
+    //$$ for(ServerPlayer player : playerMap.getPlayers(chunkPos.toLong()))
+    //$$   if(((IServerPlayer)player).getInteraction(interaction) && euclideanDistanceSquared(chunkPos, player) < 16384.0)
+    //$$     return true;
+    //$$ return false;
+    //#else
+    return playerMap.getPlayers(chunkPos.toLong()).anyMatch(player ->
+      ((IServerPlayer)player).getInteraction(interaction) && euclideanDistanceSquared(chunkPos, player) < 16384.0);
+    //#endif
   }
 
   @Inject(method = "skipPlayer", at = @At("HEAD"), cancellable = true)
