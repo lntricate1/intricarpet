@@ -2,6 +2,7 @@ package me.lntricate.intricarpet.logging.logHelpers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import carpet.logging.LoggerRegistry;
 import carpet.utils.Messenger;
@@ -47,7 +48,7 @@ public class ExplosionLogHelper
     log = Messenger.c(
       "d " + ExplosionHelper.getCountInPos() + "x ",
       Messenger.dblt("l", pos.x, pos.y, pos.z),
-      "p  [Tp]", String.format("!/tp %.3f %.3f %.3f", pos.x, pos.y, pos.z),
+      "p  [Tp]", String.format(Locale.ENGLISH, "!/tp %.3f %.3f %.3f", pos.x, pos.y, pos.z),
       ExplosionHelper.getAffectBlocks() ? "m   damage" : "m  no damage",
       "g  (", "d " + (time - ExplosionHelper.getTime()), "g ms)",
       endOfTick ? Messenger.c("g  \n(", "d " + ExplosionHelper.getCountInTick(), "g  total)") : Messenger.c()
