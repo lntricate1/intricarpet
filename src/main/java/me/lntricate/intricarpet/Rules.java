@@ -10,4 +10,10 @@ public class Rules
     options = {"true", "false", "ops"}
   )
   public static String commandInteraction = "ops";
+
+  @Rule(
+    desc = "Enables edge case fixes in optimizedTNT, at the cost of a bit less optimization",
+    category = {"COMMAND", "intricarpet"}
+  )
+  public static boolean optimizedTNTEdgeCases = false;
 }

@@ -22,17 +22,25 @@ public class ChunkMapMixin implements IChunkMap
   @Shadow private static double euclideanDistanceSquared(ChunkPos chunkPos, Entity entity){return 0.0;}
   @Shadow @Final private PlayerMap playerMap;
 
+  private boolean playerValid(ServerPlayer player, ChunkPos chunkPos, Interaction interaction)
+  {
+    return ((IServerPlayer)player).getInteraction(interaction) && euclideanDistanceSquared(chunkPos, player) < 16384d;
+  }
+
   @Override
   public boolean anyPlayerCloseWithInteraction(ChunkPos chunkPos, Interaction interaction)
   {
     //#if MC >= 11800
-    //$$ for(ServerPlayer player : playerMap.getPlayers(chunkPos.toLong()))
-    //$$   if(((IServerPlayer)player).getInteraction(interaction) && euclideanDistanceSquared(chunkPos, player) < 16384.0)
+      //#if MC >= 12002
+      //$$ for(ServerPlayer player : playerMap.getAllPlayers())
+      //#else
+      //$$ for(ServerPlayer player : playerMap.getPlayers(chunkPos.toLong()))
+      //#endif
+    //$$   if(playerValid(player, chunkPos, interaction))
     //$$     return true;
     //$$ return false;
     //#else
-    return playerMap.getPlayers(chunkPos.toLong()).anyMatch(player ->
-      ((IServerPlayer)player).getInteraction(interaction) && euclideanDistanceSquared(chunkPos, player) < 16384.0);
+    return playerMap.getPlayers(chunkPos.toLong()).anyMatch(player -> playerValid(player, chunkPos, interaction));
     //#endif
   }
 
