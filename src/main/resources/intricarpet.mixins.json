@@ -4,7 +4,6 @@
   "package": "me.lntricate.intricarpet.mixins",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "ExplosionDamageAccessor",
     "OptimizedExplosionMixin",
 
     "logger.ExplosionLogHelperMixin",
