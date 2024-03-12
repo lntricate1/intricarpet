@@ -12,19 +12,23 @@ import net.minecraft.world.phys.Vec3;
 
 public class ExplosionLogHelper
 {
-  private static BaseComponent log;
+  private static BaseComponent compactLog;
+  private static BaseComponent totalLog;
 
   public static void onExplosion(Vec3 pos, long tick, boolean affectBlocks)
   {
+    if(ExplosionHelper.getCountInTick()==0)
+      ExplosionHelper.registerFirstTime(System.currentTimeMillis());
+
     if(ExplosionHelper.isEmpty() || ExplosionHelper.isNew(pos, tick))
     {
-      long time = System.currentTimeMillis();
-      logCompact(time, false);
-      ExplosionHelper.registerNewPos(pos, tick, time, affectBlocks);
+      long newPosTime = System.currentTimeMillis();
+      logCompact(newPosTime, false);
+      ExplosionHelper.registerNewPos(pos, tick, newPosTime, affectBlocks);
     }
     else
     {
-      log = null;
+      compactLog = null;
       ExplosionHelper.incrementCounts(tick);
     }
   }
@@ -33,8 +37,13 @@ public class ExplosionLogHelper
   {
     if(option.equals("compact"))
     {
-      if(log != null)
-        messages.add(log);
+      if(compactLog != null)
+        messages.add(compactLog);
+    }
+    if(option.equals("total"))
+    {
+      if(totalLog != null)
+        messages.add(totalLog);
     }
     return messages;
   }
@@ -45,7 +54,7 @@ public class ExplosionLogHelper
       return;
 
     Vec3 pos = ExplosionHelper.getPos();
-    log = Messenger.c(
+    compactLog = Messenger.c(
       "d " + ExplosionHelper.getCountInPos() + "x ",
       Messenger.dblt("l", pos.x, pos.y, pos.z),
       "p  [Tp]", String.format(Locale.ENGLISH, "!/tp %.3f %.3f %.3f", pos.x, pos.y, pos.z),
@@ -55,16 +64,27 @@ public class ExplosionLogHelper
     );
   }
 
+  private static void logTotal(long lastTime)
+  {
+    if(ExplosionHelper.getCountInTick() == 0)
+      return;
+
+    totalLog = Messenger.c("d " + ExplosionHelper.getCountInTick(), "g  total", "g  (", "d " + (lastTime - ExplosionHelper.getFirstTime()), "g  ms)");
+  }
+
   public static void afterEntities()
   {
     if(LoggerRegistry.__explosions)
     {
-      logCompact(System.currentTimeMillis(), true);
+      long time = System.currentTimeMillis();
+      logCompact(time, true);
+      logTotal(time);
       LoggerRegistry.getLogger("explosions").log((option) ->
       {
         return onLog(new ArrayList<BaseComponent>(), option).toArray(new BaseComponent[0]);
       });
-      log = null;
+      compactLog = null;
+      totalLog = null;
     }
     ExplosionHelper.clear();
   }

@@ -9,6 +9,7 @@ public class ExplosionHelper
   private static int countInTick = 0;
   private static long tick = 0;
   private static long time = 0;
+  private static long firstTime = 0;
   private static boolean affectBlocks;
 
   public static Vec3 getPos(){return pos;}
@@ -16,6 +17,7 @@ public class ExplosionHelper
   public static int getCountInTick(){return countInTick;}
   public static long getTick(){return tick;}
   public static long getTime(){return time;}
+  public static long getFirstTime(){return firstTime;}
   public static boolean getAffectBlocks(){return affectBlocks;}
 
   public static boolean isNew(Vec3 pos_, long tick_)
@@ -36,6 +38,11 @@ public class ExplosionHelper
     countInTick += 1;
     time = time_;
     affectBlocks = affectBlocks_;
+  }
+
+  public static void registerFirstTime(long time_)
+  {
+    firstTime = time_;
   }
 
   public static void clear()
