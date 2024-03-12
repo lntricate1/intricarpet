@@ -8,7 +8,7 @@ public class LoggerRegistry
 
   public static void registerLoggers()
   {
-    carpet.logging.LoggerRegistry.registerLogger("explosions", standardLogger("explosions", "brief", new String[]{"compact", "brief", "full"}, true));
+    carpet.logging.LoggerRegistry.registerLogger("explosions", standardLogger("explosions", "brief", new String[]{"compact", "brief", "full", "total"}, true));
   }
 
   static Logger standardLogger(String logName, String def, String [] options, boolean strictOptions)
